@@ -1,0 +1,844 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Naija Trivia 🇳🇬 by Olive</title>
+  <meta name="description" content="Daily Naija culture trivia — Pidgin word guess, Afrobeats lyrics, and Nigerian slang quiz. Built by Olive." />
+  <meta property="og:title" content="Naija Trivia 🇳🇬 by Olive" />
+  <meta property="og:description" content="Test your Naija knowledge — Pidgin, Afrobeats, and Slang. Play free daily!" />
+  <meta property="og:type" content="website" />
+  <meta name="theme-color" content="#2d7a3a" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Space Grotesk', sans-serif;
+      background: #f7f8f5;
+      color: #1a1a1a;
+      min-height: 100vh;
+    }
+
+    .wrap {
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 0 16px 60px;
+    }
+
+    /* ---- HEADER ---- */
+    .header { text-align: center; padding: 28px 0 18px; }
+
+    .brand-pill {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: #fff; border: 1px solid #e2e8df;
+      border-radius: 20px; padding: 4px 14px 4px 10px;
+      font-size: 12px; color: #6b7a63; margin-bottom: 14px;
+    }
+    .brand-dot {
+      width: 7px; height: 7px; border-radius: 50%;
+      background: #2d7a3a; animation: pulse 2s infinite;
+    }
+    @keyframes pulse {
+      0%,100% { opacity:1; transform:scale(1); }
+      50% { opacity:.4; transform:scale(.75); }
+    }
+
+    h1 { font-size: 32px; font-weight: 700; color: #1a1a1a; letter-spacing: -0.5px; margin-bottom: 5px; }
+    h1 span { color: #2d7a3a; }
+    .header-sub { font-size: 13px; color: #8a9580; }
+
+    /* ---- STREAK BAR ---- */
+    .streak-bar {
+      display: flex; align-items: center; justify-content: space-between;
+      background: #fff; border: 1px solid #e2e8df;
+      border-radius: 14px; padding: 12px 18px; margin-bottom: 18px;
+    }
+    .s-item { text-align: center; }
+    .s-val { font-size: 22px; font-weight: 700; color: #2d7a3a; }
+    .s-lbl { font-size: 10px; color: #aab5a3; text-transform: uppercase; letter-spacing: .5px; margin-top: 1px; }
+    .s-div { width: 1px; height: 32px; background: #e2e8df; }
+
+    /* ---- MODE SELECTOR ---- */
+    .mode-lbl {
+      font-size: 11px; font-weight: 600; color: #aab5a3;
+      text-transform: uppercase; letter-spacing: .8px; margin-bottom: 8px;
+    }
+    .mode-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 10px; margin-bottom: 20px; }
+    .mode-card {
+      background: #fff; border: 1.5px solid #e2e8df;
+      border-radius: 14px; padding: 14px 8px; text-align: center;
+      cursor: pointer; transition: all .18s; user-select: none;
+    }
+    .mode-card:hover { border-color: #2d7a3a; background: #f2f8f3; }
+    .mode-card.active { border-color: #2d7a3a; background: #f2f8f3; }
+    .mode-card.active .m-name { color: #2d7a3a; }
+    .m-icon { font-size: 26px; margin-bottom: 6px; display: block; }
+    .m-name { font-size: 12px; font-weight: 700; color: #3a3a3a; margin-bottom: 2px; }
+    .m-sub { font-size: 10px; color: #aab5a3; }
+
+    /* ---- GAME CARD ---- */
+    .game-card {
+      background: #fff; border: 1px solid #e2e8df;
+      border-radius: 18px; padding: 22px 20px; margin-bottom: 14px;
+    }
+    .q-tag {
+      display: inline-block; background: #f2f8f3; border: 1px solid #c8e0cc;
+      color: #2d7a3a; font-size: 10px; font-weight: 700; letter-spacing: .8px;
+      text-transform: uppercase; border-radius: 8px; padding: 3px 10px; margin-bottom: 12px;
+    }
+    .q-text { font-size: 17px; font-weight: 500; line-height: 1.55; color: #1a1a1a; margin-bottom: 14px; }
+    .q-hint { font-size: 12px; color: #aab5a3; margin-bottom: 16px; font-style: italic; }
+
+    /* Lyric block for Afrobeats */
+    .lyric-block {
+      background: #f7f8f5; border-left: 3px solid #2d7a3a;
+      border-radius: 0 10px 10px 0; padding: 12px 16px; margin-bottom: 16px;
+    }
+    .lyric-line { font-size: 15px; font-weight: 500; color: #2a3a2a; line-height: 1.7; font-style: italic; }
+    .blank-word {
+      display: inline-block; background: #c8e0cc; border-radius: 4px;
+      min-width: 56px; height: 20px; vertical-align: middle;
+    }
+
+    /* ---- WORDLE GRID ---- */
+    .wordle-grid {
+      display: flex; gap: 5px; justify-content: center;
+      margin-bottom: 16px; flex-wrap: wrap;
+    }
+    .w-cell {
+      width: 44px; height: 44px; border: 1.5px solid #d5dbd0;
+      border-radius: 8px; display: flex; align-items: center; justify-content: center;
+      font-size: 18px; font-weight: 700; text-transform: uppercase;
+      color: #1a1a1a; transition: all .25s; background: #fff;
+    }
+    .w-cell.filled { border-color: #8aa885; background: #f7f8f5; }
+    .w-cell.correct { background: #2d7a3a; border-color: #2d7a3a; color: #fff; animation: pop .25s; }
+    .w-cell.present { background: #e5970a; border-color: #e5970a; color: #fff; animation: pop .25s; }
+    .w-cell.absent { background: #c8cec3; border-color: #c8cec3; color: #fff; }
+    @keyframes pop {
+      0% { transform: scale(1); } 50% { transform: scale(1.14); } 100% { transform: scale(1); }
+    }
+
+    /* ---- LIVES ---- */
+    .lives-row { display: flex; gap: 5px; justify-content: center; margin-bottom: 14px; }
+    .life { font-size: 16px; transition: all .3s; }
+    .life.lost { filter: grayscale(1); opacity: .3; transform: scale(.8); }
+
+    /* ---- KEYBOARD ---- */
+    .keyboard { display: flex; flex-direction: column; gap: 5px; }
+    .key-row { display: flex; gap: 4px; justify-content: center; }
+    .key {
+      min-width: 30px; height: 40px; border-radius: 7px; padding: 0 5px;
+      background: #e8ede4; border: none; color: #1a1a1a;
+      font-size: 12px; font-weight: 600; font-family: 'Space Grotesk', sans-serif;
+      cursor: pointer; transition: all .12s;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .key:active { transform: scale(.92); }
+    .key.wide { min-width: 50px; font-size: 10px; }
+    .key.correct { background: #2d7a3a; color: #fff; }
+    .key.present { background: #e5970a; color: #fff; }
+    .key.absent { background: #d0d5cc; color: #8a9580; }
+
+    /* ---- OPTIONS ---- */
+    .options-grid { display: grid; gap: 8px; }
+    .opt-btn {
+      background: #f7f8f5; border: 1.5px solid #e2e8df;
+      border-radius: 12px; padding: 13px 16px; text-align: left; cursor: pointer;
+      color: #2a2a2a; font-size: 14px; font-family: 'Space Grotesk', sans-serif;
+      display: flex; align-items: center; gap: 10px; transition: all .15s; width: 100%;
+    }
+    .opt-btn:hover:not(:disabled) { background: #f2f8f3; border-color: #2d7a3a; transform: translateX(2px); }
+    .opt-btn:disabled { cursor: default; }
+    .opt-btn.correct { background: #f2f8f3; border-color: #2d7a3a; color: #2d7a3a; }
+    .opt-btn.wrong { background: #fef2f2; border-color: #fca5a5; color: #bbb; }
+    .opt-letter {
+      width: 24px; height: 24px; border-radius: 6px; background: #e2e8df;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 11px; font-weight: 700; color: #6b7a63; flex-shrink: 0;
+    }
+
+    /* ---- RESULT BOX ---- */
+    .result-box {
+      background: #fff; border: 1.5px solid #e2e8df;
+      border-radius: 16px; padding: 22px 20px; text-align: center;
+      margin-bottom: 14px; display: none;
+    }
+    .result-box.show { display: block; }
+    .result-box.win { border-color: #2d7a3a; background: #f2f8f3; }
+    .result-box.lose { border-color: #fca5a5; background: #fef9f9; }
+    .r-emoji { font-size: 40px; margin-bottom: 8px; }
+    .r-title { font-size: 20px; font-weight: 700; color: #1a1a1a; margin-bottom: 4px; }
+    .r-sub { font-size: 13px; color: #6b7a63; margin-bottom: 14px; line-height: 1.5; }
+    .r-share {
+      font-size: 12px; background: #f7f8f5; border: 1px solid #e2e8df;
+      border-radius: 8px; padding: 10px 12px; font-family: monospace;
+      color: #4a5a42; margin-bottom: 14px; white-space: pre-line;
+      text-align: left; line-height: 1.7;
+    }
+
+    /* ---- BUTTONS ---- */
+    .btn-primary {
+      width: 100%; padding: 14px; border-radius: 12px; border: none; cursor: pointer;
+      background: #2d7a3a; color: #fff; font-size: 15px; font-weight: 600;
+      font-family: 'Space Grotesk', sans-serif; transition: all .15s; margin-bottom: 8px;
+    }
+    .btn-primary:hover { background: #256630; transform: translateY(-1px); }
+    .btn-primary:active { transform: scale(.98); }
+    .btn-ghost {
+      width: 100%; padding: 12px; border-radius: 12px;
+      border: 1.5px solid #e2e8df; background: #fff; cursor: pointer;
+      color: #6b7a63; font-size: 14px; font-family: 'Space Grotesk', sans-serif;
+      transition: all .15s;
+    }
+    .btn-ghost:hover { background: #f2f8f3; border-color: #2d7a3a; color: #2d7a3a; }
+
+    /* ---- TOAST ---- */
+    .toast {
+      position: fixed; top: 16px; left: 50%;
+      transform: translateX(-50%) translateY(-80px);
+      background: #1a1a1a; border-radius: 10px; padding: 10px 20px;
+      font-size: 13px; color: #fff; z-index: 9999;
+      transition: transform .28s cubic-bezier(.34,1.56,.64,1);
+      pointer-events: none; white-space: nowrap;
+      font-family: 'Space Grotesk', sans-serif;
+    }
+    .toast.show { transform: translateX(-50%) translateY(0); }
+
+    /* ---- HOW TO PLAY ---- */
+    .how-card {
+      background: #fff; border: 1px solid #e2e8df;
+      border-radius: 14px; padding: 16px 18px; margin-bottom: 18px;
+    }
+    .how-title { font-size: 12px; font-weight: 700; color: #2d7a3a; margin-bottom: 10px; text-transform: uppercase; letter-spacing: .5px; }
+    .how-row { display: flex; align-items: flex-start; gap: 10px; margin-bottom: 7px; }
+    .how-icon { font-size: 16px; flex-shrink: 0; margin-top: 1px; }
+    .how-text { font-size: 13px; color: #4a5a42; line-height: 1.4; }
+
+    /* ---- FOOTER ---- */
+    .footer { text-align: center; padding-top: 10px; }
+    .footer-text { font-size: 12px; color: #aab5a3; }
+    .footer-text span { color: #2d7a3a; font-weight: 700; }
+
+    /* ---- MOBILE ---- */
+    @media (max-width: 420px) {
+      h1 { font-size: 26px; }
+      .w-cell { width: 38px; height: 38px; font-size: 15px; }
+      .key { min-width: 26px; height: 36px; font-size: 11px; }
+      .key.wide { min-width: 44px; }
+      .s-val { font-size: 18px; }
+    }
+  </style>
+</head>
+<body>
+
+<div id="toast" class="toast"></div>
+
+<div class="wrap">
+
+  <!-- HEADER -->
+  <div class="header">
+    <div class="brand-pill">
+      <div class="brand-dot"></div>
+      by Olive &middot; Daily Challenge
+    </div>
+    <h1>Naija <span>Trivia</span> 🇳🇬</h1>
+    <div class="header-sub">Pidgin &middot; Afrobeats &middot; Slang — pick your game</div>
+  </div>
+
+  <!-- STREAK BAR -->
+  <div class="streak-bar">
+    <div class="s-item">
+      <div class="s-val" id="sv">0</div>
+      <div class="s-lbl">🔥 Streak</div>
+    </div>
+    <div class="s-div"></div>
+    <div class="s-item">
+      <div class="s-val" id="pv">0</div>
+      <div class="s-lbl">Played</div>
+    </div>
+    <div class="s-div"></div>
+    <div class="s-item">
+      <div class="s-val" id="wv">0%</div>
+      <div class="s-lbl">Win %</div>
+    </div>
+    <div class="s-div"></div>
+    <div class="s-item">
+      <div class="s-val" id="bv">0</div>
+      <div class="s-lbl">Best</div>
+    </div>
+  </div>
+
+  <!-- HOW TO PLAY -->
+  <div class="how-card">
+    <div class="how-title">How to play</div>
+    <div class="how-row"><div class="how-icon">🗣️</div><div class="how-text"><strong>Pidgin Word</strong> — Guess the hidden word letter by letter. Green = correct spot, yellow = wrong spot.</div></div>
+    <div class="how-row"><div class="how-icon">🎵</div><div class="how-text"><strong>Afrobeats</strong> — Two song lines are shown. Pick the missing word from the options.</div></div>
+    <div class="how-row"><div class="how-icon">💬</div><div class="how-text"><strong>Naija Slang</strong> — Read the slang or phrase, pick the correct meaning.</div></div>
+  </div>
+
+  <!-- MODE SELECTOR -->
+  <div class="mode-lbl">Choose your game</div>
+  <div class="mode-grid">
+    <div class="mode-card active" id="mode-pidgin" onclick="selectMode('pidgin')">
+      <span class="m-icon">🗣️</span>
+      <div class="m-name">Pidgin Word</div>
+      <div class="m-sub">Guess the word</div>
+    </div>
+    <div class="mode-card" id="mode-afrobeats" onclick="selectMode('afrobeats')">
+      <span class="m-icon">🎵</span>
+      <div class="m-name">Afrobeats</div>
+      <div class="m-sub">Fill the lyric</div>
+    </div>
+    <div class="mode-card" id="mode-slang" onclick="selectMode('slang')">
+      <span class="m-icon">💬</span>
+      <div class="m-name">Naija Slang</div>
+      <div class="m-sub">What e mean?</div>
+    </div>
+  </div>
+
+  <!-- GAME CARD -->
+  <div class="game-card">
+    <div id="q-tag" class="q-tag">Pidgin Word</div>
+    <div id="q-text" class="q-text"></div>
+    <div id="q-hint" class="q-hint"></div>
+
+    <!-- Lyric block (Afrobeats only) -->
+    <div id="lyric-block" class="lyric-block" style="display:none">
+      <div class="lyric-line" id="lyric-line1"></div>
+      <div class="lyric-line" id="lyric-line2"></div>
+    </div>
+
+    <!-- Lives -->
+    <div class="lives-row" id="lives-row"></div>
+
+    <!-- Wordle (Pidgin) -->
+    <div id="wordle-section">
+      <div class="wordle-grid" id="wordle-grid"></div>
+      <div class="keyboard" id="keyboard"></div>
+    </div>
+
+    <!-- MCQ (Afrobeats + Slang) -->
+    <div id="options-section" style="display:none">
+      <div class="options-grid" id="options-grid"></div>
+    </div>
+  </div>
+
+  <!-- RESULT BOX -->
+  <div class="result-box" id="result-box">
+    <div class="r-emoji" id="r-emoji"></div>
+    <div class="r-title" id="r-title"></div>
+    <div class="r-sub" id="r-sub"></div>
+    <div class="r-share" id="r-share"></div>
+    <button class="btn-primary" onclick="copyShare()">📋 Copy and share</button>
+    <button class="btn-ghost" onclick="nextQ()">Next question →</button>
+  </div>
+
+  <!-- FOOTER -->
+  <div class="footer">
+    <div class="footer-text">Made with 💚 by <span>Olive</span> &middot; Naija Trivia &copy; 2025</div>
+  </div>
+
+</div>
+
+<script>
+  /* =============================================
+     QUESTION BANK
+     Add more questions to each array below!
+  ============================================= */
+  const Q = {
+
+    pidgin: [
+      { word: "SAPA",   hint: "4 letters · When your account balance dey cry 😭",    clue: "State of extreme financial hardship — young Nigerians know am well" },
+      { word: "JAPA",   hint: "4 letters · The great Naija migration 🛫",             clue: "To flee or emigrate in search of a better life abroad" },
+      { word: "WAHALA", hint: "6 letters · Trouble dey sleep, yanga go wake am 😅",  clue: "Problem or serious trouble — 'no wahala' means no problem" },
+      { word: "OSHEY",  hint: "5 letters · Pure hype and admiration 🙌",              clue: "Pidgin exclamation of praise or approval for someone" },
+      { word: "CHOP",   hint: "4 letters · Every Nigerian knows this one 🍽️",        clue: "To eat — or to receive/take something (e.g. money)" },
+      { word: "MENT",   hint: "4 letters · Something not right upstairs 🤪",          clue: "Slang for someone acting crazy or mentally unwell" },
+      { word: "VIBES",  hint: "5 letters · Good energy in the atmosphere ✨",          clue: "The atmosphere or feeling in a place — 'the vibes dey' = good energy" },
+      { word: "AGIDI",  hint: "5 letters · Stubborn like this Naija food 😤",         clue: "Solidified corn porridge — also means stubbornness" },
+      { word: "KPOMO", hint: "5 letters · The skin wey sweet pass 🐄",               clue: "Cowhide — popular Nigerian delicacy and meat addition" },
+      { word: "ABUJA",  hint: "5 letters · Na here power dey 🏛️",                     clue: "The Federal Capital Territory of Nigeria" },
+    ],
+
+    afrobeats: [
+      {
+        q: "Fill in the missing word in these two lines from Burna Boy's 'Ye':",
+        line1: "\"Aye, I no want to die today\"",
+        line2: "\"If trouble should ___ today\"",
+        blank: "come",
+        options: ["come", "fall", "rise", "show"],
+        answer: 0,
+        explain: "From 'Ye' by Burna Boy (2018), produced by Leriq. One of the most iconic Afrobeats songs ever — spent weeks on global charts. 🔥"
+      },
+      {
+        q: "Complete these two lines from Wizkid ft. Tems — 'Essence':",
+        line1: "\"Baby, I don't want to die\"",
+        line2: "\"I just want to feel your ___ tonight\"",
+        blank: "body",
+        options: ["body", "love", "soul", "vibes"],
+        answer: 0,
+        explain: "From 'Essence' (2020) off Wizkid's Made in Lagos album featuring Tems. Remixed with Justin Bieber and became a global Afrobeats anthem. 🌍"
+      },
+      {
+        q: "Fill the blank from Davido's 'Fall':",
+        line1: "\"I don fall for you, I don fall for you\"",
+        line2: "\"I just know say I go ___ for you\"",
+        blank: "die",
+        options: ["die", "ride", "cry", "stay"],
+        answer: 0,
+        explain: "'Fall' (2017) by Davido became the longest-charting Nigerian pop song ever on the US Billboard Hot 100 at the time. 🏆"
+      },
+      {
+        q: "Complete Asake's two lines from 'Joha':",
+        line1: "\"I am on a new level, oh\"",
+        line2: "\"You say make I slow down, I say ___ down\"",
+        blank: "kneel",
+        options: ["kneel", "calm", "bow", "sit"],
+        answer: 0,
+        explain: "From 'Joha' by Asake (2022) off his debut Mr Money With The Vibe. He signed to Olamide's YBNL and blew up immediately. 👑"
+      },
+      {
+        q: "Fill the blank in Tems' breakthrough song 'Free Mind':",
+        line1: "\"I wanna feel no more pain\"",
+        line2: "\"I'm gonna break these ___ today\"",
+        blank: "chains",
+        options: ["chains", "walls", "rules", "gates"],
+        answer: 0,
+        explain: "'Free Mind' (2020) launched Tems from Lagos open mics to global superstardom. She later won a Grammy and performed at the World Cup. 🎶"
+      },
+      {
+        q: "Fill the blank from Fireboy DML's 'Peru':",
+        line1: "\"I don't wanna go to Peru\"",
+        line2: "\"All I wanna do is ___ with you\"",
+        blank: "stay",
+        options: ["stay", "dance", "vibe", "ride"],
+        answer: 0,
+        explain: "'Peru' (2021) by Fireboy DML went global after Ed Sheeran jumped on the remix. It charted in over 15 countries. 🌎"
+      },
+      {
+        q: "Complete these lines from Rema's 'Calm Down':",
+        line1: "\"Baby, calm down, calm down\"",
+        line2: "\"Girl, don't be afraid, I go ___ you down\"",
+        blank: "slow",
+        options: ["slow", "hold", "put", "lay"],
+        answer: 0,
+        explain: "'Calm Down' (2022) by Rema, later remixed with Selena Gomez, became one of the biggest Afrobeats crossover hits globally. 💫"
+      },
+      {
+        q: "Fill the blank from Olamide's 'Wo!!':",
+        line1: "\"Oya jo, make we ___ together\"",
+        line2: "\"To wa ro, ko si wahala\"",
+        blank: "dance",
+        options: ["dance", "sing", "vibe", "pray"],
+        answer: 0,
+        explain: "'Wo!!' (2016) by Olamide became one of the biggest street anthems in Nigeria. Ko si wahala means 'no problem' in Yoruba. 🕺"
+      },
+    ],
+
+    slang: [
+      {
+        q: "What does 'enter one chance' mean?",
+        options: ["Win a lucky prize", "Get robbed or scammed by criminals disguised as transport", "Find an empty seat on a bus", "Land an unexpected job"],
+        answer: 1,
+        explain: "'One chance' is a dangerous criminal scheme where robbers pose as commercial drivers or passengers to rob victims. A very real Lagos danger. 🚌"
+      },
+      {
+        q: "If someone says you are 'shayo', wetin dem mean?",
+        options: ["You are stubborn", "You are drunk or tipsy", "You are hardworking", "You are fashionable"],
+        answer: 1,
+        explain: "Shayo = intoxicated/drunk. 'E don shayo' = he is drunk. The word traces back to Yoruba language and spread into Lagos Pidgin. 🍺"
+      },
+      {
+        q: "What does 'abi' mean when used at the end of a sentence?",
+        options: ["Immediately", "No problem", "Right? / Isn't it? — seeking agreement", "Finish it"],
+        answer: 2,
+        explain: "'Abi' is a Yoruba-origin tag question used constantly in Nigerian Pidgin — like 'right?' e.g. 'E sweet, abi?' means 'It's nice, right?' 🤝"
+      },
+      {
+        q: "Someone says 'you don blow' about your friend. Wetin happen?",
+        options: ["Your friend exploded in anger", "Your friend became famous or very successful", "Your friend travelled abroad", "Your friend lost a lot of money"],
+        answer: 1,
+        explain: "'Don blow' = became famous or achieved major success. Originated in the music industry and spread to everyday Naija speech. 🌟"
+      },
+      {
+        q: "What does 'ginger' mean as a verb in Nigerian slang?",
+        options: ["To add spice to food", "To motivate or excite someone", "To confuse a person", "To steal something"],
+        answer: 1,
+        explain: "'Ginger' = to hype up, motivate, or excite someone. 'Ginger me abeg' means 'motivate me please'. Popularised in Lagos youth culture. 💪"
+      },
+      {
+        q: "What is 'owambe' in Naija culture?",
+        options: ["A traditional Yoruba curse", "A big, flashy party or celebration with aso-ebi", "A type of Nigerian soup", "A night market"],
+        answer: 1,
+        explain: "Owambe = a lavish Nigerian party, typically Yoruba, with aso-ebi uniforms, jollof rice, Fuji or Afrobeats music, and heavy dancing. 🎉"
+      },
+      {
+        q: "When someone says 'e don do', wetin e mean?",
+        options: ["He made a mistake", "It is finished or done — something has reached its conclusion", "He is cooking", "Something bad happened"],
+        answer: 1,
+        explain: "'E don do' = it is done / finished / over. Used to end a conversation, declare a situation resolved, or announce something is complete. ✅"
+      },
+      {
+        q: "What does 'see finish' mean in Nigerian slang?",
+        options: ["To watch a movie to the end", "To lose respect for someone by being too familiar with them", "To finish someone's food", "To overstay your welcome"],
+        answer: 1,
+        explain: "'See finish' = when someone has seen you so much they no longer respect or value you. 'Don't let them see finish you' = maintain your mystique. 👁️"
+      },
+      {
+        q: "What is 'aso-ebi'?",
+        options: ["A Naija insult", "Matching fabric worn by family or friends at a celebration", "Traditional Igbo food", "A type of Hausa music"],
+        answer: 1,
+        explain: "Aso-ebi = coordinated fabric/outfit worn by groups at Nigerian celebrations like weddings and parties. A beautiful Nigerian fashion tradition. 👗"
+      },
+      {
+        q: "If someone says 'I go soon come', wetin dem really mean in Nigerian time?",
+        options: ["They will arrive in exactly 5 minutes", "They will come back very soon — could mean anything from 5 mins to 2 hours", "They are already on their way", "They are cancelling plans"],
+        answer: 1,
+        explain: "'I go soon come' technically means 'I'll be back shortly' but in practice, Nigerian time means it could be much longer. A beloved cultural joke! ⏰"
+      },
+    ]
+  };
+
+  /* =============================================
+     GAME STATE
+  ============================================= */
+  let st = {
+    mode: 'pidgin',
+    answered: false,
+    guesses: [],
+    cur: '',
+    maxG: 6,
+    tries: 0,
+    keyS: {},
+    shareEmoji: '',
+    idx: { pidgin: 0, afrobeats: 0, slang: 0 },
+    stats: { streak: 0, played: 0, wins: 0, best: 0 }
+  };
+
+  /* Load stats from localStorage */
+  function loadStats() {
+    try {
+      const saved = localStorage.getItem('naija-trivia-stats');
+      if (saved) st.stats = JSON.parse(saved);
+    } catch(e) {}
+    updateStats();
+  }
+
+  function saveStats() {
+    try { localStorage.setItem('naija-trivia-stats', JSON.stringify(st.stats)); } catch(e) {}
+  }
+
+  /* =============================================
+     MODE SWITCH
+  ============================================= */
+  function selectMode(m) {
+    document.querySelectorAll('.mode-card').forEach(c => c.classList.remove('active'));
+    document.getElementById('mode-' + m).classList.add('active');
+    st.mode = m;
+    st.answered = false; st.guesses = []; st.cur = '';
+    st.tries = 0; st.keyS = {}; st.shareEmoji = '';
+    document.getElementById('result-box').classList.remove('show','win','lose');
+    init();
+  }
+
+  function getQ() {
+    return Q[st.mode][st.idx[st.mode] % Q[st.mode].length];
+  }
+
+  /* =============================================
+     INIT QUESTION
+  ============================================= */
+  function init() {
+    const q = getQ();
+    const tags = { pidgin: '🗣️ Pidgin Word', afrobeats: '🎵 Afrobeats Lyric', slang: '💬 Naija Slang' };
+    document.getElementById('q-tag').textContent = tags[st.mode];
+    document.getElementById('lyric-block').style.display = 'none';
+
+    if (st.mode === 'pidgin') {
+      document.getElementById('q-text').textContent = q.clue;
+      document.getElementById('q-hint').textContent = q.hint;
+      document.getElementById('wordle-section').style.display = 'block';
+      document.getElementById('options-section').style.display = 'none';
+      renderGrid(); renderKB(); renderLives(st.maxG, '🟩');
+
+    } else if (st.mode === 'afrobeats') {
+      document.getElementById('q-text').textContent = q.q;
+      document.getElementById('q-hint').textContent = '';
+      document.getElementById('lyric-block').style.display = 'block';
+      document.getElementById('lyric-line1').textContent = q.line1;
+      document.getElementById('lyric-line2').innerHTML = q.line2.replace(
+        '___', '<span class="blank-word"></span>'
+      );
+      document.getElementById('wordle-section').style.display = 'none';
+      document.getElementById('options-section').style.display = 'block';
+      renderOpts(); renderLives(3, '❤️');
+
+    } else {
+      document.getElementById('q-text').textContent = q.q;
+      document.getElementById('q-hint').textContent = '';
+      document.getElementById('wordle-section').style.display = 'none';
+      document.getElementById('options-section').style.display = 'block';
+      renderOpts(); renderLives(3, '❤️');
+    }
+  }
+
+  /* =============================================
+     LIVES
+  ============================================= */
+  function renderLives(n, icon) {
+    const row = document.getElementById('lives-row');
+    row.innerHTML = '';
+    for (let i = 0; i < n; i++) {
+      const d = document.createElement('div');
+      d.className = 'life'; d.id = 'life-' + i; d.textContent = icon;
+      row.appendChild(d);
+    }
+  }
+
+  /* =============================================
+     WORDLE GRID
+  ============================================= */
+  function renderGrid() {
+    const q = getQ(); const wl = q.word.length;
+    const grid = document.getElementById('wordle-grid');
+    grid.innerHTML = '';
+    for (let r = 0; r < st.maxG; r++) {
+      const g = st.guesses[r] || '';
+      for (let c = 0; c < wl; c++) {
+        const cell = document.createElement('div');
+        cell.className = 'w-cell'; cell.id = 'c-' + r + '-' + c;
+        if (g[c]) {
+          cell.textContent = g[c];
+          if (r < st.guesses.length) cell.classList.add(lSt(g, q.word, c));
+          else cell.classList.add('filled');
+        }
+        grid.appendChild(cell);
+      }
+    }
+    const ar = st.guesses.length;
+    if (ar < st.maxG && !st.answered) {
+      for (let c = 0; c < st.cur.length; c++) {
+        const cl = document.getElementById('c-' + ar + '-' + c);
+        if (cl) { cl.textContent = st.cur[c]; cl.classList.add('filled'); }
+      }
+    }
+  }
+
+  function lSt(g, w, p) {
+    if (g[p] === w[p]) return 'correct';
+    if (w.includes(g[p])) return 'present';
+    return 'absent';
+  }
+
+  /* =============================================
+     KEYBOARD
+  ============================================= */
+  function renderKB() {
+    const rows = [
+      ['Q','W','E','R','T','Y','U','I','O','P'],
+      ['A','S','D','F','G','H','J','K','L'],
+      ['ENTER','Z','X','C','V','B','N','M','⌫']
+    ];
+    const kb = document.getElementById('keyboard'); kb.innerHTML = '';
+    rows.forEach(row => {
+      const rd = document.createElement('div'); rd.className = 'key-row';
+      row.forEach(k => {
+        const b = document.createElement('button');
+        b.className = 'key' + (k.length > 1 ? ' wide' : '');
+        b.textContent = k;
+        const s = st.keyS[k]; if (s) b.classList.add(s);
+        b.onclick = () => hKey(k);
+        rd.appendChild(b);
+      });
+      kb.appendChild(rd);
+    });
+  }
+
+  function hKey(k) {
+    if (st.answered || st.mode !== 'pidgin') return;
+    const q = getQ(); const wl = q.word.length;
+    if (k === '⌫' || k === 'BACKSPACE') { st.cur = st.cur.slice(0, -1); }
+    else if (k === 'ENTER') {
+      if (st.cur.length < wl) { showToast('Too short! Add more letters'); return; }
+      submitWord(); return;
+    } else if (st.cur.length < wl && /^[A-Z]$/.test(k)) { st.cur += k; }
+    renderGrid();
+  }
+
+  document.addEventListener('keydown', e => {
+    if (st.mode !== 'pidgin' || st.answered) return;
+    const k = e.key.toUpperCase();
+    if (k === 'BACKSPACE') hKey('⌫');
+    else if (k === 'ENTER') hKey('ENTER');
+    else if (/^[A-Z]$/.test(k)) hKey(k);
+  });
+
+  function submitWord() {
+    const q = getQ(); const g = st.cur; const w = q.word;
+    st.guesses.push(g);
+    for (let i = 0; i < g.length; i++) {
+      const s = lSt(g, w, i); const cur = st.keyS[g[i]];
+      if (!cur || (cur === 'present' && s === 'correct') || cur === 'absent') st.keyS[g[i]] = s;
+    }
+    let row = '';
+    for (let i = 0; i < g.length; i++) {
+      row += lSt(g, w, i) === 'correct' ? '🟩' : lSt(g, w, i) === 'present' ? '🟨' : '⬛';
+    }
+    st.shareEmoji += row + '\n';
+    const li = document.getElementById('life-' + (st.guesses.length - 1));
+    if (li) { li.textContent = g === w ? '🟩' : '❌'; if (g !== w) li.classList.add('lost'); }
+    st.cur = ''; renderGrid(); renderKB();
+    if (g === w) setTimeout(() => showResult(true, st.guesses.length), 350);
+    else if (st.guesses.length >= st.maxG) setTimeout(() => showResult(false, st.guesses.length), 350);
+  }
+
+  /* =============================================
+     OPTIONS (MCQ)
+  ============================================= */
+  function renderOpts() {
+    const q = getQ(); const grid = document.getElementById('options-grid');
+    grid.innerHTML = '';
+    ['A','B','C','D'].forEach((letter, i) => {
+      const b = document.createElement('button');
+      b.className = 'opt-btn';
+      b.innerHTML = `<span class="opt-letter">${letter}</span>${q.options[i]}`;
+      b.onclick = () => hOpt(i, b, q);
+      grid.appendChild(b);
+    });
+  }
+
+  function hOpt(idx, btn, q) {
+    if (st.answered) return;
+    const all = document.querySelectorAll('.opt-btn');
+    if (idx === q.answer) {
+      btn.classList.add('correct');
+      all.forEach(b => b.disabled = true);
+      st.answered = true; st.tries++;
+      /* reveal blank word in lyric */
+      if (st.mode === 'afrobeats') {
+        const bl = document.querySelector('.blank-word');
+        if (bl) { bl.textContent = q.blank; bl.style.background = '#c8e0cc'; bl.style.padding = '0 6px'; bl.style.color = '#2d7a3a'; bl.style.fontWeight = '700'; }
+      }
+      const share = `Naija Trivia 🇳🇬 ${st.mode === 'afrobeats' ? '🎵' : '💬'}\n` +
+        `Got it in ${st.tries} ${st.tries === 1 ? 'try' : 'tries'}! ${st.tries === 1 ? '🔥' : '✅'}\n` +
+        `🔥 Streak: ${st.stats.streak + 1}\nPlay → naijatrivia.netlify.app`;
+      setTimeout(() => showResult(true, st.tries, share, q.explain), 320);
+    } else {
+      btn.classList.add('wrong'); btn.disabled = true; st.tries++;
+      const livesLeft = 3 - st.tries;
+      for (let i = 2; i >= livesLeft; i--) {
+        const l = document.getElementById('life-' + i);
+        if (l) { l.textContent = '🖤'; l.classList.add('lost'); }
+      }
+      if (livesLeft <= 0) {
+        all.forEach(b => b.disabled = true); st.answered = true;
+        all[q.answer].classList.add('correct');
+        if (st.mode === 'afrobeats') {
+          const bl = document.querySelector('.blank-word');
+          if (bl) { bl.textContent = q.blank; bl.style.background = '#fca5a5'; bl.style.padding = '0 6px'; bl.style.color = '#c0392b'; bl.style.fontWeight = '700'; }
+        }
+        const share = `Naija Trivia 🇳🇬 — E hard me today 😅\nPlay → naijatrivia.netlify.app`;
+        setTimeout(() => showResult(false, 3, share, q.explain), 320);
+      } else {
+        showToast(`Try again! ${livesLeft} ${livesLeft === 1 ? 'chance' : 'chances'} left`);
+      }
+    }
+  }
+
+  /* =============================================
+     RESULT
+  ============================================= */
+  function showResult(win, tries, customShare, explain) {
+    st.stats.played++;
+    if (win) {
+      st.stats.wins++;
+      st.stats.streak++;
+      if (st.stats.streak > st.stats.best) st.stats.best = st.stats.streak;
+    } else {
+      st.stats.streak = 0;
+    }
+    updateStats(); saveStats();
+
+    const box = document.getElementById('result-box');
+    box.classList.add('show', win ? 'win' : 'lose');
+
+    const wMsgs = [
+      'E don do! You sabi! 🔥',
+      'Naija no dey carry last! 💚',
+      'You too much, abeg! 👑',
+      'Sharp sharp! 🎯',
+      'Your brain dey work! 🧠'
+    ];
+    const lMsgs = [
+      'No wahala, try again! 😅',
+      'E go better next time 🙏',
+      'The answer sha hard! 😩'
+    ];
+
+    document.getElementById('r-emoji').textContent =
+      win ? (tries === 1 ? '🏆' : tries <= 2 ? '🔥' : '✅') : '😭';
+    document.getElementById('r-title').textContent =
+      win ? wMsgs[Math.floor(Math.random() * wMsgs.length)] : lMsgs[Math.floor(Math.random() * lMsgs.length)];
+    document.getElementById('r-sub').textContent =
+      explain || (win ? `Answered in ${tries} ${tries === 1 ? 'try' : 'tries'}` : `Answer: ${getQ().word || 'See options above'}`);
+
+    const q = getQ();
+    const shareText = customShare ||
+      `Naija Trivia 🇳🇬 — ${q.word}\n${st.shareEmoji.trim()}\n🔥 Streak: ${st.stats.streak}\nPlay → naijatrivia.netlify.app`;
+    document.getElementById('r-share').textContent = shareText;
+    document.getElementById('r-share').dataset.copy = shareText;
+  }
+
+  function copyShare() {
+    const t = document.getElementById('r-share').dataset.copy;
+    if (navigator.clipboard) {
+      navigator.clipboard.writeText(t).then(() => showToast('Copied! Share the vibe 🔥'));
+    } else {
+      /* fallback for older browsers */
+      const ta = document.createElement('textarea');
+      ta.value = t; document.body.appendChild(ta); ta.select();
+      document.execCommand('copy'); document.body.removeChild(ta);
+      showToast('Copied! Share the vibe 🔥');
+    }
+  }
+
+  function nextQ() {
+    st.idx[st.mode] = (st.idx[st.mode] + 1) % Q[st.mode].length;
+    st.answered = false; st.guesses = []; st.cur = '';
+    st.tries = 0; st.keyS = {}; st.shareEmoji = '';
+    document.getElementById('result-box').classList.remove('show','win','lose');
+    init();
+  }
+
+  /* =============================================
+     STATS
+  ============================================= */
+  function updateStats() {
+    document.getElementById('sv').textContent = st.stats.streak;
+    document.getElementById('pv').textContent = st.stats.played;
+    document.getElementById('wv').textContent = st.stats.played > 0
+      ? Math.round((st.stats.wins / st.stats.played) * 100) + '%' : '0%';
+    document.getElementById('bv').textContent = st.stats.best;
+  }
+
+  /* =============================================
+     TOAST
+  ============================================= */
+  function showToast(msg) {
+    const t = document.getElementById('toast');
+    t.textContent = msg; t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 2300);
+  }
+
+  /* =============================================
+     BOOT
+  ============================================= */
+  loadStats();
+  init();
+</script>
+</body>
+</html>
