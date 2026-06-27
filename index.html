@@ -318,8 +318,8 @@ body{font-family:'Space Grotesk',sans-serif;background:#f7f8f5;color:#1a1a1a;min
       <strong>Step 1</strong> &mdash; Go to <strong>supabase.com</strong>, sign up free, create a project.<br/>
       <strong>Step 2</strong> &mdash; Go to Settings &rarr; API. Copy your Project URL and anon public key.<br/>
       <strong>Step 3</strong> &mdash; In your index.html find and replace these two lines:<br/>
-      <span class="setup-code">const SUPABASE_URL = 'YOUR_SUPABASE_URL';</span>
-      <span class="setup-code">const SUPABASE_KEY = 'YOUR_SUPABASE_ANON_KEY';</span>
+      <span class="setup-code">const SUPABASE_URL = 'https://gisdmdsxnacasjdbcndf.supabase.co';</span>
+      <span class="setup-code">const SUPABASE_KEY = 'sb_publishable_slk1_SXUzCAehzlBAkEGJQ_siqp6SJM';</span>
       <strong>Step 4</strong> &mdash; In SQL Editor run this once:<br/>
       <span class="setup-code">create table naija_trivia_scores (player_name text primary key, streak int default 0, wins int default 0, played int default 0, best_streak int default 0, updated_at timestamptz default now());</span>
       <strong>Step 5</strong> &mdash; Table Editor &rarr; naija_trivia_scores &rarr; disable RLS so all players can read/write.<br/>
@@ -355,8 +355,8 @@ body{font-family:'Space Grotesk',sans-serif;background:#f7f8f5;color:#1a1a1a;min
 /* ============================================================
    SUPABASE — replace with your values from supabase.com
 ============================================================ */
-var SUPABASE_URL = 'YOUR_SUPABASE_URL';
-var SUPABASE_KEY = 'YOUR_SUPABASE_ANON_KEY';
+var SUPABASE_URL = 'https://gisdmdsxnacasjdbcndf.supabase.co';
+var SUPABASE_KEY = 'sb_publishable_slk1_SXUzCAehzlBAkEGJQ_siqp6SJM';
 var SUPABASE_READY = SUPABASE_URL !== 'YOUR_SUPABASE_URL';
 
 /* ============================================================
