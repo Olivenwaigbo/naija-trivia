@@ -319,13 +319,34 @@ async function sbFetch(path,opts){
   }catch(e){return null;}
 }
 
-async function upsertScore(){
-  if(!SUPABASE_READY||!playerName) return;
-  await sbFetch('naija_trivia_scores?on_conflict=player_name',{
-    method:'POST',prefer:'resolution=merge-duplicates,return=representation',
-    body:JSON.stringify({player_name:playerName,streak:st.stats.streak,wins:st.stats.wins,played:st.stats.played,best_streak:st.stats.best,updated_at:new Date().toISOString()})
-  });
+async function upsertScore() {
+  if (!SUPABASE_READY || !playerName) return;
+
+  try {
+    const res = await fetch(SUPABASE_URL + "/rest/v1/naija_trivia_scores", {
+      method: "POST",
+      headers: {
+        "apikey": SUPABASE_KEY,
+        "Authorization": "Bearer " + SUPABASE_KEY,
+        "Content-Type": "application/json",
+        "Prefer": "resolution=merge-duplicates"
+      },
+      body: JSON.stringify([{
+        player_name: playerName,
+        streak: st.stats.streak,
+        wins: st.stats.wins,
+        played: st.stats.played,
+        best_streak: st.stats.best,
+        updated_at: new Date().toISOString()
+      }])
+    });
+
+    console.log("Saved score ✅", await res.text());
+  } catch (err) {
+    console.error("Error saving score ❌", err);
+  }
 }
+
 
 async function fetchLeaderboard(sortBy){
   if(!SUPABASE_READY) return null;
