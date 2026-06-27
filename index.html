@@ -1,185 +1,280 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Naija Trivia by Olive</title>
-  <meta name="description" content="Daily Naija culture trivia - Pidgin, Afrobeats, Slang. Built by Olive." />
-  <meta name="theme-color" content="#2d7a3a" />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
-  <style>
-    *{box-sizing:border-box;margin:0;padding:0}
-    body{font-family:'Space Grotesk',sans-serif;background:#f7f8f5;color:#1a1a1a;min-height:100vh}
-    .wrap{max-width:600px;margin:0 auto;padding:0 16px 60px}
-    .screen{display:none}.screen.active{display:block}
-    .welcome-wrap{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px 16px;max-width:480px;margin:0 auto}
-    .welcome-logo{font-size:52px;margin-bottom:12px;text-align:center}
-    .welcome-title{font-size:30px;font-weight:700;color:#1a1a1a;letter-spacing:-0.5px;margin-bottom:4px;text-align:center}
-    .welcome-title span{color:#2d7a3a}
-    .welcome-sub{font-size:14px;color:#8a9580;text-align:center;margin-bottom:28px}
-    .welcome-card{background:#fff;border:1px solid #e2e8df;border-radius:18px;padding:22px 20px;width:100%;margin-bottom:14px}
-    .wc-title{font-size:12px;font-weight:700;color:#2d7a3a;text-transform:uppercase;letter-spacing:.6px;margin-bottom:14px}
-    .name-input{width:100%;background:#f7f8f5;border:1.5px solid #e2e8df;border-radius:12px;padding:13px 16px;color:#1a1a1a;font-size:16px;font-family:'Space Grotesk',sans-serif;outline:none;transition:border .2s;margin-bottom:12px}
-    .name-input:focus{border-color:#2d7a3a}
-    .name-input::placeholder{color:#bbb}
-    .how-row{display:flex;align-items:flex-start;gap:10px;margin-bottom:8px}
-    .how-text{font-size:13px;color:#4a5a42;line-height:1.4}
-    .btn-start{width:100%;padding:15px;border-radius:12px;border:none;cursor:pointer;background:#2d7a3a;color:#fff;font-size:16px;font-weight:700;font-family:'Space Grotesk',sans-serif;transition:all .15s}
-    .btn-start:hover{background:#256630;transform:translateY(-1px)}
-    .by-olive{font-size:12px;color:#aab5a3;text-align:center;margin-top:14px}
-    .by-olive span{color:#2d7a3a;font-weight:700}
-    .header{text-align:center;padding:22px 0 14px}
-    .brand-pill{display:inline-flex;align-items:center;gap:6px;background:#fff;border:1px solid #e2e8df;border-radius:20px;padding:4px 14px 4px 10px;font-size:12px;color:#6b7a63;margin-bottom:10px}
-    .brand-dot{width:7px;height:7px;border-radius:50%;background:#2d7a3a;animation:pulse 2s infinite}
-    @keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(.75)}}
-    h1{font-size:28px;font-weight:700;color:#1a1a1a;letter-spacing:-0.5px;margin-bottom:3px}
-    h1 span{color:#2d7a3a}
-    .header-sub{font-size:12px;color:#8a9580}
-    .player-badge{display:inline-flex;align-items:center;gap:6px;background:#f2f8f3;border:1px solid #c8e0cc;border-radius:20px;padding:5px 14px;font-size:12px;color:#2d7a3a;font-weight:600;margin-top:8px;cursor:pointer;transition:all .15s}
-    .player-badge:hover{background:#e8f5eb}
-    .streak-bar{display:flex;align-items:center;justify-content:space-between;background:#fff;border:1px solid #e2e8df;border-radius:14px;padding:10px 16px;margin-bottom:14px}
-    .s-item{text-align:center}
-    .s-val{font-size:20px;font-weight:700;color:#2d7a3a}
-    .s-lbl{font-size:10px;color:#aab5a3;text-transform:uppercase;letter-spacing:.5px;margin-top:1px}
-    .s-div{width:1px;height:28px;background:#e2e8df}
-    .mode-lbl{font-size:11px;font-weight:600;color:#aab5a3;text-transform:uppercase;letter-spacing:.8px;margin-bottom:8px}
-    .mode-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:16px}
-    .mode-card{background:#fff;border:1.5px solid #e2e8df;border-radius:14px;padding:12px 8px;text-align:center;cursor:pointer;transition:all .18s;user-select:none}
-    .mode-card:hover{border-color:#2d7a3a;background:#f2f8f3}
-    .mode-card.active{border-color:#2d7a3a;background:#f2f8f3}
-    .mode-card.active .m-name{color:#2d7a3a}
-    .m-icon{font-size:24px;margin-bottom:5px;display:block}
-    .m-name{font-size:12px;font-weight:700;color:#3a3a3a;margin-bottom:2px}
-    .m-sub{font-size:10px;color:#aab5a3}
-    .game-card{background:#fff;border:1px solid #e2e8df;border-radius:18px;padding:20px 18px;margin-bottom:12px}
-    .q-tag{display:inline-block;background:#f2f8f3;border:1px solid #c8e0cc;color:#2d7a3a;font-size:10px;font-weight:700;letter-spacing:.8px;text-transform:uppercase;border-radius:8px;padding:3px 10px;margin-bottom:10px}
-    .q-text{font-size:16px;font-weight:500;line-height:1.55;color:#1a1a1a;margin-bottom:12px}
-    .q-hint{font-size:12px;color:#aab5a3;margin-bottom:14px;font-style:italic}
-    .lyric-block{background:#f7f8f5;border-left:3px solid #2d7a3a;border-radius:0 10px 10px 0;padding:11px 14px;margin-bottom:14px}
-    .lyric-line{font-size:14px;font-weight:500;color:#2a3a2a;line-height:1.7;font-style:italic}
-    .blank-word{display:inline-block;background:#c8e0cc;border-radius:4px;min-width:56px;height:20px;vertical-align:middle}
-    .wordle-grid{display:flex;gap:5px;justify-content:center;margin-bottom:14px;flex-wrap:wrap}
-    .w-cell{width:42px;height:42px;border:1.5px solid #d5dbd0;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:17px;font-weight:700;text-transform:uppercase;color:#1a1a1a;transition:all .25s;background:#fff}
-    .w-cell.filled{border-color:#8aa885;background:#f7f8f5}
-    .w-cell.correct{background:#2d7a3a;border-color:#2d7a3a;color:#fff;animation:pop .25s}
-    .w-cell.present{background:#e5970a;border-color:#e5970a;color:#fff;animation:pop .25s}
-    .w-cell.absent{background:#c8cec3;border-color:#c8cec3;color:#fff}
-    @keyframes pop{0%{transform:scale(1)}50%{transform:scale(1.14)}100%{transform:scale(1)}}
-    .lives-row{display:flex;gap:5px;justify-content:center;margin-bottom:12px}
-    .life{font-size:15px;transition:all .3s}
-    .life.lost{filter:grayscale(1);opacity:.3;transform:scale(.8)}
-    .keyboard{display:flex;flex-direction:column;gap:5px}
-    .key-row{display:flex;gap:4px;justify-content:center}
-    .key{min-width:28px;height:38px;border-radius:7px;padding:0 4px;background:#e8ede4;border:none;color:#1a1a1a;font-size:11px;font-weight:600;font-family:'Space Grotesk',sans-serif;cursor:pointer;transition:all .12s;display:flex;align-items:center;justify-content:center}
-    .key:active{transform:scale(.92)}
-    .key.wide{min-width:48px;font-size:10px}
-    .key.correct{background:#2d7a3a;color:#fff}
-    .key.present{background:#e5970a;color:#fff}
-    .key.absent{background:#d0d5cc;color:#8a9580}
-    .options-grid{display:grid;gap:8px}
-    .opt-btn{background:#f7f8f5;border:1.5px solid #e2e8df;border-radius:12px;padding:12px 14px;text-align:left;cursor:pointer;color:#2a2a2a;font-size:14px;font-family:'Space Grotesk',sans-serif;display:flex;align-items:center;gap:10px;transition:all .15s;width:100%}
-    .opt-btn:hover:not(:disabled){background:#f2f8f3;border-color:#2d7a3a;transform:translateX(2px)}
-    .opt-btn:disabled{cursor:default}
-    .opt-btn.correct{background:#f2f8f3;border-color:#2d7a3a;color:#2d7a3a}
-    .opt-btn.wrong{background:#fef2f2;border-color:#fca5a5;color:#bbb}
-    .opt-letter{width:24px;height:24px;border-radius:6px;background:#e2e8df;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#6b7a63;flex-shrink:0}
-    .result-box{background:#fff;border:1.5px solid #e2e8df;border-radius:16px;padding:20px;text-align:center;margin-bottom:12px;display:none}
-    .result-box.show{display:block}
-    .result-box.win{border-color:#2d7a3a;background:#f2f8f3}
-    .result-box.lose{border-color:#fca5a5;background:#fef9f9}
-    .r-emoji{font-size:38px;margin-bottom:6px}
-    .r-title{font-size:19px;font-weight:700;color:#1a1a1a;margin-bottom:4px}
-    .r-sub{font-size:13px;color:#6b7a63;margin-bottom:6px;line-height:1.5}
-    .r-answer{font-size:14px;font-weight:700;color:#2d7a3a;margin-bottom:12px;padding:8px 14px;background:#f2f8f3;border-radius:8px;display:none}
-    .r-answer.show{display:block}
-    .r-share{font-size:12px;background:#f7f8f5;border:1px solid #e2e8df;border-radius:8px;padding:9px 12px;font-family:monospace;color:#4a5a42;margin-bottom:12px;white-space:pre-line;text-align:left;line-height:1.7}
-    .btn-primary{width:100%;padding:13px;border-radius:12px;border:none;cursor:pointer;background:#2d7a3a;color:#fff;font-size:15px;font-weight:600;font-family:'Space Grotesk',sans-serif;transition:all .15s;margin-bottom:8px}
-    .btn-primary:hover{background:#256630;transform:translateY(-1px)}
-    .btn-ghost{width:100%;padding:11px;border-radius:12px;border:1.5px solid #e2e8df;background:#fff;cursor:pointer;color:#6b7a63;font-size:14px;font-family:'Space Grotesk',sans-serif;transition:all .15s}
-    .btn-ghost:hover{background:#f2f8f3;border-color:#2d7a3a;color:#2d7a3a}
-    .btn-row{display:grid;grid-template-columns:1fr 1fr;gap:8px}
-    .lb-header{display:flex;align-items:center;justify-content:space-between;padding:22px 0 16px}
-    .lb-title{font-size:22px;font-weight:700;color:#1a1a1a}
-    .lb-back{background:#fff;border:1px solid #e2e8df;border-radius:10px;padding:7px 14px;font-size:13px;color:#6b7a63;cursor:pointer;font-family:'Space Grotesk',sans-serif;transition:all .15s}
-    .lb-back:hover{border-color:#2d7a3a;color:#2d7a3a}
-    .lb-tabs{display:flex;gap:8px;margin-bottom:14px}
-    .lb-tab{flex:1;padding:9px;border-radius:10px;border:1.5px solid #e2e8df;background:#fff;font-size:12px;font-weight:600;color:#6b7a63;cursor:pointer;font-family:'Space Grotesk',sans-serif;transition:all .15s;text-align:center}
-    .lb-tab.active{border-color:#2d7a3a;background:#f2f8f3;color:#2d7a3a}
-    .lb-card{background:#fff;border:1px solid #e2e8df;border-radius:14px;overflow:hidden;margin-bottom:16px}
-    .lb-row{display:flex;align-items:center;gap:12px;padding:13px 16px;border-bottom:1px solid #f0f0ec}
-    .lb-row:last-child{border-bottom:none}
-    .lb-row.me{background:#f2f8f3}
-    .lb-rank{width:28px;font-size:14px;font-weight:700;color:#aab5a3;text-align:center;flex-shrink:0}
-    .lb-avatar{width:36px;height:36px;border-radius:50%;background:#f2f8f3;border:1.5px solid #c8e0cc;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:#2d7a3a;flex-shrink:0}
-    .lb-name{flex:1;font-size:14px;font-weight:600;color:#1a1a1a;display:flex;align-items:center;gap:6px;flex-wrap:wrap}
-    .lb-you{font-size:10px;color:#2d7a3a;font-weight:700;background:#e8f5eb;border-radius:4px;padding:1px 6px}
-    .lb-score{text-align:right;flex-shrink:0}
-    .lb-score-val{font-size:16px;font-weight:700;color:#2d7a3a}
-    .lb-score-lbl{font-size:10px;color:#aab5a3}
-    .lb-empty{text-align:center;padding:32px 16px;color:#aab5a3;font-size:14px}
-    .lb-loading{text-align:center;padding:24px;color:#aab5a3;font-size:13px}
-    .setup-banner{background:#fffbf0;border:1px solid #fde68a;border-radius:12px;padding:14px 16px;margin-bottom:14px}
-    .setup-title{font-size:13px;font-weight:700;color:#92400e;margin-bottom:8px}
-    .setup-text{font-size:12px;color:#78350f;line-height:1.8}
-    .setup-code{display:block;background:#fff;border:1px solid #fde68a;border-radius:6px;padding:7px 10px;font-family:monospace;font-size:11px;color:#92400e;margin:6px 0;word-break:break-all}
-    .toast{position:fixed;top:16px;left:50%;transform:translateX(-50%) translateY(-80px);background:#1a1a1a;border-radius:10px;padding:10px 20px;font-size:13px;color:#fff;z-index:9999;transition:transform .28s cubic-bezier(.34,1.56,.64,1);pointer-events:none;white-space:nowrap;font-family:'Space Grotesk',sans-serif}
-    .toast.show{transform:translateX(-50%) translateY(0)}
-    .footer{text-align:center;padding-top:10px}
-    .footer-text{font-size:11px;color:#aab5a3}
-    .footer-text span{color:#2d7a3a;font-weight:700}
-    @media(max-width:420px){h1{font-size:24px}.w-cell{width:36px;height:36px;font-size:14px}.key{min-width:24px;height:34px}.key.wide{min-width:42px}.s-val{font-size:17px}}
-  </style>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Naija Trivia by Olive Nwaigbo</title>
+<meta name="description" content="Naija Trivia by Olive Nwaigbo - Pidgin, Afrobeats, Slang daily challenge"/>
+<meta name="theme-color" content="#2d7a3a"/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Space Grotesk',sans-serif;background:#f7f8f5;color:#1a1a1a;min-height:100vh}
+.wrap{max-width:600px;margin:0 auto;padding:0 16px 60px}
+.screen{display:none}.screen.active{display:block}
+
+/* SOUND TOGGLE */
+.sound-btn{position:fixed;top:14px;right:14px;z-index:999;width:38px;height:38px;border-radius:50%;background:#fff;border:1.5px solid #e2e8df;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:18px;box-shadow:0 2px 8px rgba(0,0,0,.08);transition:all .15s}
+.sound-btn:hover{border-color:#2d7a3a;transform:scale(1.08)}
+
+/* WELCOME */
+.welcome-wrap{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px 16px;max-width:480px;margin:0 auto}
+.welcome-logo{font-size:56px;margin-bottom:14px;text-align:center;animation:bounce 2s ease-in-out infinite}
+@keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-8px)}}
+.welcome-title{font-size:34px;font-weight:800;color:#1a1a1a;letter-spacing:-0.8px;margin-bottom:2px;text-align:center}
+.welcome-title span{color:#2d7a3a}
+.welcome-by{font-size:13px;color:#8a9580;text-align:center;margin-bottom:6px;font-weight:500}
+.welcome-by strong{color:#2d7a3a}
+.welcome-sub{font-size:14px;color:#8a9580;text-align:center;margin-bottom:28px}
+.welcome-card{background:#fff;border:1px solid #e2e8df;border-radius:18px;padding:22px 20px;width:100%;margin-bottom:14px}
+.wc-title{font-size:12px;font-weight:700;color:#2d7a3a;text-transform:uppercase;letter-spacing:.6px;margin-bottom:14px}
+.name-input{width:100%;background:#f7f8f5;border:1.5px solid #e2e8df;border-radius:12px;padding:13px 16px;color:#1a1a1a;font-size:16px;font-family:'Space Grotesk',sans-serif;outline:none;transition:border .2s;margin-bottom:12px}
+.name-input:focus{border-color:#2d7a3a}
+.name-input::placeholder{color:#bbb}
+.how-row{display:flex;align-items:flex-start;gap:10px;margin-bottom:8px}
+.how-text{font-size:13px;color:#4a5a42;line-height:1.4}
+.btn-start{width:100%;padding:15px;border-radius:12px;border:none;cursor:pointer;background:#2d7a3a;color:#fff;font-size:16px;font-weight:700;font-family:'Space Grotesk',sans-serif;transition:all .15s;letter-spacing:.2px}
+.btn-start:hover{background:#256630;transform:translateY(-1px)}
+.by-olive{font-size:12px;color:#aab5a3;text-align:center;margin-top:14px}
+.by-olive strong{color:#2d7a3a}
+
+/* GAME HEADER */
+.header{text-align:center;padding:20px 0 12px}
+.brand-pill{display:inline-flex;align-items:center;gap:6px;background:#fff;border:1px solid #e2e8df;border-radius:20px;padding:4px 14px 4px 10px;font-size:12px;color:#6b7a63;margin-bottom:8px}
+.brand-dot{width:7px;height:7px;border-radius:50%;background:#2d7a3a;animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.4;transform:scale(.75)}}
+.game-title{font-size:30px;font-weight:800;color:#1a1a1a;letter-spacing:-0.8px;margin-bottom:1px;line-height:1.1}
+.game-title span{color:#2d7a3a}
+.game-by{font-size:11px;color:#aab5a3;margin-bottom:3px;font-weight:500}
+.game-by strong{color:#2d7a3a}
+.header-sub{font-size:12px;color:#8a9580}
+.player-badge{display:inline-flex;align-items:center;gap:6px;background:#f2f8f3;border:1px solid #c8e0cc;border-radius:20px;padding:5px 14px;font-size:12px;color:#2d7a3a;font-weight:600;margin-top:8px;cursor:pointer;transition:all .15s}
+.player-badge:hover{background:#e8f5eb}
+
+/* STREAK BAR */
+.streak-bar{display:flex;align-items:center;justify-content:space-between;background:#fff;border:1px solid #e2e8df;border-radius:14px;padding:10px 12px;margin-bottom:14px}
+.s-item{text-align:center;flex:1;cursor:pointer;transition:all .15s;border-radius:8px;padding:4px 2px}
+.s-item:hover{background:#f2f8f3}
+.s-val{font-size:20px;font-weight:800;color:#2d7a3a}
+.s-lbl{font-size:9px;color:#aab5a3;text-transform:uppercase;letter-spacing:.5px;margin-top:1px}
+.s-div{width:1px;height:28px;background:#e2e8df;flex-shrink:0}
+
+/* STREAK REWARDS */
+.streak-rewards{background:#fff;border:1px solid #e2e8df;border-radius:14px;padding:14px 16px;margin-bottom:14px}
+.sr-title{font-size:12px;font-weight:700;color:#2d7a3a;text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px}
+.sr-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.sr-item{text-align:center;padding:10px 6px;border-radius:10px;border:1.5px solid #e2e8df;background:#f7f8f5;transition:all .2s;position:relative}
+.sr-item.unlocked{border-color:#2d7a3a;background:#f2f8f3}
+.sr-item.unlocked .sr-lock{display:none}
+.sr-item.next-up{border-color:#e5970a;background:#fffbf0}
+.sr-icon{font-size:22px;margin-bottom:4px;display:block}
+.sr-name{font-size:10px;font-weight:700;color:#3a3a3a;margin-bottom:2px}
+.sr-req{font-size:9px;color:#aab5a3}
+.sr-lock{position:absolute;top:4px;right:4px;font-size:10px;color:#aab5a3}
+.sr-badge{display:inline-block;background:#2d7a3a;color:#fff;font-size:9px;font-weight:700;border-radius:4px;padding:1px 5px;margin-top:3px}
+
+/* MODES */
+.mode-lbl{font-size:11px;font-weight:600;color:#aab5a3;text-transform:uppercase;letter-spacing:.8px;margin-bottom:8px}
+.mode-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:16px}
+.mode-card{background:#fff;border:1.5px solid #e2e8df;border-radius:14px;padding:12px 8px;text-align:center;cursor:pointer;transition:all .18s;user-select:none}
+.mode-card:hover{border-color:#2d7a3a;background:#f2f8f3}
+.mode-card.active{border-color:#2d7a3a;background:#f2f8f3}
+.mode-card.active .m-name{color:#2d7a3a}
+.m-icon{font-size:24px;margin-bottom:5px;display:block}
+.m-name{font-size:12px;font-weight:700;color:#3a3a3a;margin-bottom:2px}
+.m-sub{font-size:10px;color:#aab5a3}
+
+/* GAME CARD */
+.game-card{background:#fff;border:1px solid #e2e8df;border-radius:18px;padding:20px 18px;margin-bottom:12px}
+.q-tag{display:inline-block;background:#f2f8f3;border:1px solid #c8e0cc;color:#2d7a3a;font-size:10px;font-weight:700;letter-spacing:.8px;text-transform:uppercase;border-radius:8px;padding:3px 10px;margin-bottom:10px}
+.q-text{font-size:16px;font-weight:500;line-height:1.55;color:#1a1a1a;margin-bottom:12px}
+.q-hint{font-size:12px;color:#aab5a3;margin-bottom:14px;font-style:italic}
+.lyric-block{background:#f7f8f5;border-left:3px solid #2d7a3a;border-radius:0 10px 10px 0;padding:11px 14px;margin-bottom:14px}
+.lyric-line{font-size:14px;font-weight:500;color:#2a3a2a;line-height:1.7;font-style:italic}
+.blank-word{display:inline-block;background:#c8e0cc;border-radius:4px;min-width:56px;height:20px;vertical-align:middle}
+
+/* WORDLE */
+.wordle-grid{display:flex;gap:5px;justify-content:center;margin-bottom:14px;flex-wrap:wrap}
+.w-cell{width:42px;height:42px;border:1.5px solid #d5dbd0;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:17px;font-weight:700;text-transform:uppercase;color:#1a1a1a;transition:all .25s;background:#fff}
+.w-cell.filled{border-color:#8aa885;background:#f7f8f5}
+.w-cell.correct{background:#2d7a3a;border-color:#2d7a3a;color:#fff;animation:pop .25s}
+.w-cell.present{background:#e5970a;border-color:#e5970a;color:#fff;animation:pop .25s}
+.w-cell.absent{background:#c8cec3;border-color:#c8cec3;color:#fff}
+@keyframes pop{0%{transform:scale(1)}50%{transform:scale(1.18)}100%{transform:scale(1)}}
+
+.lives-row{display:flex;gap:5px;justify-content:center;margin-bottom:12px}
+.life{font-size:15px;transition:all .3s}
+.life.lost{filter:grayscale(1);opacity:.3;transform:scale(.8)}
+
+/* KEYBOARD */
+.keyboard{display:flex;flex-direction:column;gap:5px}
+.key-row{display:flex;gap:4px;justify-content:center}
+.key{min-width:28px;height:38px;border-radius:7px;padding:0 4px;background:#e8ede4;border:none;color:#1a1a1a;font-size:11px;font-weight:600;font-family:'Space Grotesk',sans-serif;cursor:pointer;transition:all .12s;display:flex;align-items:center;justify-content:center}
+.key:active{transform:scale(.92)}
+.key.wide{min-width:48px;font-size:10px}
+.key.correct{background:#2d7a3a;color:#fff}
+.key.present{background:#e5970a;color:#fff}
+.key.absent{background:#d0d5cc;color:#8a9580}
+
+/* OPTIONS */
+.options-grid{display:grid;gap:8px}
+.opt-btn{background:#f7f8f5;border:1.5px solid #e2e8df;border-radius:12px;padding:12px 14px;text-align:left;cursor:pointer;color:#2a2a2a;font-size:14px;font-family:'Space Grotesk',sans-serif;display:flex;align-items:center;gap:10px;transition:all .15s;width:100%}
+.opt-btn:hover:not(:disabled){background:#f2f8f3;border-color:#2d7a3a;transform:translateX(2px)}
+.opt-btn:disabled{cursor:default}
+.opt-btn.correct{background:#f2f8f3;border-color:#2d7a3a;color:#2d7a3a}
+.opt-btn.wrong{background:#fef2f2;border-color:#fca5a5;color:#bbb}
+.opt-letter{width:24px;height:24px;border-radius:6px;background:#e2e8df;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#6b7a63;flex-shrink:0}
+
+/* RESULT */
+.result-box{background:#fff;border:1.5px solid #e2e8df;border-radius:16px;padding:20px;text-align:center;margin-bottom:12px;display:none}
+.result-box.show{display:block}
+.result-box.win{border-color:#2d7a3a;background:#f2f8f3}
+.result-box.lose{border-color:#fca5a5;background:#fef9f9}
+.r-emoji{font-size:42px;margin-bottom:6px}
+.r-title{font-size:20px;font-weight:800;color:#1a1a1a;margin-bottom:4px}
+.r-sub{font-size:13px;color:#6b7a63;margin-bottom:6px;line-height:1.5}
+.r-answer{font-size:14px;font-weight:700;color:#2d7a3a;margin-bottom:12px;padding:10px 14px;background:#f2f8f3;border-radius:10px;display:none;border:1px solid #c8e0cc}
+.r-answer.show{display:block}
+.r-unlock{font-size:12px;color:#e5970a;font-weight:700;background:#fffbf0;border:1px solid #fde68a;border-radius:8px;padding:8px 12px;margin-bottom:12px;display:none}
+.r-unlock.show{display:block}
+.r-share{font-size:12px;background:#f7f8f5;border:1px solid #e2e8df;border-radius:8px;padding:9px 12px;font-family:monospace;color:#4a5a42;margin-bottom:12px;white-space:pre-line;text-align:left;line-height:1.7}
+.btn-primary{width:100%;padding:13px;border-radius:12px;border:none;cursor:pointer;background:#2d7a3a;color:#fff;font-size:15px;font-weight:600;font-family:'Space Grotesk',sans-serif;transition:all .15s;margin-bottom:8px}
+.btn-primary:hover{background:#256630;transform:translateY(-1px)}
+.btn-ghost{width:100%;padding:11px;border-radius:12px;border:1.5px solid #e2e8df;background:#fff;cursor:pointer;color:#6b7a63;font-size:14px;font-family:'Space Grotesk',sans-serif;transition:all .15s}
+.btn-ghost:hover{background:#f2f8f3;border-color:#2d7a3a;color:#2d7a3a}
+.btn-row{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+
+/* LEADERBOARD */
+.lb-header{display:flex;align-items:center;justify-content:space-between;padding:22px 0 16px}
+.lb-title{font-size:28px;font-weight:800;color:#1a1a1a;letter-spacing:-0.5px}
+.lb-title span{color:#2d7a3a}
+.lb-back{background:#fff;border:1px solid #e2e8df;border-radius:10px;padding:8px 16px;font-size:13px;font-weight:600;color:#6b7a63;cursor:pointer;font-family:'Space Grotesk',sans-serif;transition:all .15s}
+.lb-back:hover{border-color:#2d7a3a;color:#2d7a3a}
+.lb-subtitle{font-size:13px;color:#8a9580;margin-bottom:16px;font-weight:500}
+.lb-tabs{display:flex;gap:8px;margin-bottom:14px}
+.lb-tab{flex:1;padding:10px;border-radius:10px;border:1.5px solid #e2e8df;background:#fff;font-size:13px;font-weight:600;color:#6b7a63;cursor:pointer;font-family:'Space Grotesk',sans-serif;transition:all .15s;text-align:center}
+.lb-tab.active{border-color:#2d7a3a;background:#f2f8f3;color:#2d7a3a}
+.lb-card{background:#fff;border:1px solid #e2e8df;border-radius:14px;overflow:hidden;margin-bottom:16px}
+.lb-row{display:flex;align-items:center;gap:12px;padding:14px 16px;border-bottom:1px solid #f0f0ec;transition:background .15s}
+.lb-row:last-child{border-bottom:none}
+.lb-row.me{background:#f2f8f3}
+.lb-rank{width:32px;font-size:16px;font-weight:800;color:#aab5a3;text-align:center;flex-shrink:0}
+.lb-avatar{width:40px;height:40px;border-radius:50%;background:#f2f8f3;border:2px solid #c8e0cc;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:800;color:#2d7a3a;flex-shrink:0}
+.lb-info{flex:1;min-width:0}
+.lb-name{font-size:14px;font-weight:700;color:#1a1a1a;display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.lb-badge-tag{font-size:10px;padding:1px 6px;border-radius:4px;font-weight:700}
+.lb-you{background:#e8f5eb;color:#2d7a3a}
+.lb-title-tag{background:#fffbf0;color:#e5970a;border:1px solid #fde68a}
+.lb-streak-mini{font-size:11px;color:#aab5a3;margin-top:1px}
+.lb-score{text-align:right;flex-shrink:0}
+.lb-score-val{font-size:20px;font-weight:800;color:#2d7a3a}
+.lb-score-lbl{font-size:10px;color:#aab5a3}
+.lb-empty{text-align:center;padding:32px 16px;color:#aab5a3;font-size:14px}
+.lb-loading{text-align:center;padding:24px;color:#aab5a3;font-size:13px}
+
+/* REWARDS SCREEN */
+.rw-header{display:flex;align-items:center;justify-content:space-between;padding:22px 0 16px}
+.rw-title{font-size:28px;font-weight:800;color:#1a1a1a;letter-spacing:-0.5px}
+.rw-title span{color:#2d7a3a}
+.rw-subtitle{font-size:13px;color:#8a9580;margin-bottom:20px}
+.rw-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:20px}
+.rw-card{background:#fff;border:1.5px solid #e2e8df;border-radius:16px;padding:18px 16px;text-align:center;transition:all .2s;position:relative;overflow:hidden}
+.rw-card.unlocked{border-color:#2d7a3a;background:#f2f8f3}
+.rw-card.next-up{border-color:#e5970a;background:#fffbf0}
+.rw-card.locked{opacity:.55}
+.rw-big-icon{font-size:40px;margin-bottom:8px;display:block}
+.rw-name{font-size:15px;font-weight:800;color:#1a1a1a;margin-bottom:4px}
+.rw-desc{font-size:12px;color:#6b7a63;line-height:1.4;margin-bottom:8px}
+.rw-prog{background:#e2e8df;border-radius:20px;height:6px;margin-bottom:6px;overflow:hidden}
+.rw-prog-fill{background:#2d7a3a;height:100%;border-radius:20px;transition:width .5s}
+.rw-prog-fill.orange{background:#e5970a}
+.rw-req{font-size:11px;color:#aab5a3;font-weight:600}
+.rw-unlocked-tag{position:absolute;top:10px;right:10px;background:#2d7a3a;color:#fff;font-size:9px;font-weight:700;border-radius:4px;padding:2px 6px}
+
+/* SETUP BANNER */
+.setup-banner{background:#fffbf0;border:1px solid #fde68a;border-radius:12px;padding:14px 16px;margin-bottom:14px}
+.setup-title{font-size:13px;font-weight:700;color:#92400e;margin-bottom:8px}
+.setup-text{font-size:12px;color:#78350f;line-height:1.8}
+.setup-code{display:block;background:#fff;border:1px solid #fde68a;border-radius:6px;padding:7px 10px;font-family:monospace;font-size:11px;color:#92400e;margin:6px 0;word-break:break-all}
+
+/* TOAST */
+.toast{position:fixed;top:16px;left:50%;transform:translateX(-50%) translateY(-80px);background:#1a1a1a;border-radius:10px;padding:10px 20px;font-size:13px;color:#fff;z-index:9999;transition:transform .28s cubic-bezier(.34,1.56,.64,1);pointer-events:none;white-space:nowrap;font-family:'Space Grotesk',sans-serif}
+.toast.show{transform:translateX(-50%) translateY(0)}
+.footer{text-align:center;padding-top:10px}
+.footer-text{font-size:11px;color:#aab5a3}
+.footer-text strong{color:#2d7a3a}
+
+@media(max-width:420px){
+  .game-title{font-size:24px}.w-cell{width:36px;height:36px;font-size:14px}
+  .key{min-width:24px;height:34px}.key.wide{min-width:42px}.s-val{font-size:17px}
+  .rw-grid{grid-template-columns:1fr}
+}
+</style>
 </head>
 <body>
+
+<button class="sound-btn" id="sound-btn" onclick="toggleSound()" title="Toggle sound">&#128266;</button>
 <div id="toast" class="toast"></div>
 
-<!-- WELCOME -->
+<!-- ===================== WELCOME ===================== -->
 <div id="screen-welcome" class="screen active">
-  <div class="welcome-wrap">
-    <div class="welcome-logo">&#127475;&#127468;</div>
-    <div class="welcome-title">Naija <span>Trivia</span></div>
-    <div class="welcome-sub">Pidgin · Afrobeats · Slang — test your Naija knowledge!</div>
-    <div class="welcome-card">
-      <div class="wc-title">Enter your name to play</div>
-      <input id="player-name-input" class="name-input" type="text" placeholder="e.g. Lagos Legend" maxlength="20" />
-      <button class="btn-start" onclick="startGame()">Let's Go! &#128640;</button>
-    </div>
-    <div class="welcome-card">
-      <div class="wc-title">How to play</div>
-      <div class="how-row"><div style="font-size:16px;flex-shrink:0">&#128483;</div><div class="how-text"><strong>Pidgin Word</strong> — Guess the word letter by letter. Green = correct spot, yellow = wrong spot. 6 tries! Answer shown if you lose.</div></div>
-      <div class="how-row"><div style="font-size:16px;flex-shrink:0">&#127925;</div><div class="how-text"><strong>Afrobeats</strong> — Two song lines shown. Pick the missing word. 3 lives!</div></div>
-      <div class="how-row"><div style="font-size:16px;flex-shrink:0">&#128172;</div><div class="how-text"><strong>Naija Slang</strong> — Read the slang, pick the correct meaning. 3 lives!</div></div>
-    </div>
-    <div class="by-olive">Made with love by <span>Olive</span></div>
+<div class="welcome-wrap">
+  <div class="welcome-logo">&#127475;&#127468;</div>
+  <div class="welcome-title">Naija <span>Trivia</span></div>
+  <div class="welcome-by">by <strong>Olive Nwaigbo</strong></div>
+  <div class="welcome-sub">Pidgin &middot; Afrobeats &middot; Slang &mdash; daily Naija knowledge test!</div>
+  <div class="welcome-card">
+    <div class="wc-title">Enter your name to play</div>
+    <input id="player-name-input" class="name-input" type="text" placeholder="e.g. Lagos Legend &#128293;" maxlength="20"/>
+    <button class="btn-start" onclick="startGame()">Let's Go! &#128640;</button>
   </div>
+  <div class="welcome-card">
+    <div class="wc-title">How to play</div>
+    <div class="how-row"><div style="font-size:16px;flex-shrink:0">&#128483;</div><div class="how-text"><strong>Pidgin Word</strong> &mdash; Guess the word letter by letter. Green = right spot, yellow = wrong spot. 6 tries! Answer revealed if you lose.</div></div>
+    <div class="how-row"><div style="font-size:16px;flex-shrink:0">&#127925;</div><div class="how-text"><strong>Afrobeats</strong> &mdash; Two song lines shown. Pick the missing word from 4 options. 3 lives!</div></div>
+    <div class="how-row"><div style="font-size:16px;flex-shrink:0">&#128172;</div><div class="how-text"><strong>Naija Slang</strong> &mdash; Read the slang, pick the correct meaning. 3 lives!</div></div>
+    <div class="how-row"><div style="font-size:16px;flex-shrink:0">&#127942;</div><div class="how-text"><strong>Streak Rewards</strong> &mdash; Build your streak to unlock titles and bragging rights. Check the rewards screen!</div></div>
+  </div>
+  <div class="by-olive">Made with &#128154; by <strong>Olive Nwaigbo</strong></div>
+</div>
 </div>
 
-<!-- GAME -->
+<!-- ===================== GAME ===================== -->
 <div id="screen-game" class="screen">
 <div class="wrap">
   <div class="header">
-    <div class="brand-pill"><div class="brand-dot"></div>Daily Challenge</div>
-    <h1>Naija <span>Trivia</span> &#127475;&#127468;</h1>
-    <div class="header-sub">Pidgin · Afrobeats · Slang</div>
-    <div class="player-badge" onclick="showLeaderboard()">&#128100; <span id="player-name-display"></span> &nbsp;·&nbsp; &#127942; Leaderboard</div>
+    <div class="brand-pill"><div class="brand-dot"></div>Daily Challenge &middot; by Olive Nwaigbo</div>
+    <div class="game-title">Naija <span>Trivia</span> &#127475;&#127468;</div>
+    <div class="game-by">by <strong>Olive Nwaigbo</strong></div>
+    <div class="header-sub">Pidgin &middot; Afrobeats &middot; Slang</div>
+    <div class="player-badge" onclick="showLeaderboard()">&#128100; <span id="player-name-display"></span> &nbsp;&middot;&nbsp; &#127942; Leaderboard</div>
   </div>
+
   <div class="streak-bar">
-    <div class="s-item"><div class="s-val" id="sv">0</div><div class="s-lbl">&#128293; Streak</div></div>
+    <div class="s-item" onclick="showRewards()"><div class="s-val" id="sv">0</div><div class="s-lbl">&#128293; Streak</div></div>
     <div class="s-div"></div>
     <div class="s-item"><div class="s-val" id="pv">0</div><div class="s-lbl">Played</div></div>
     <div class="s-div"></div>
     <div class="s-item"><div class="s-val" id="wv">0%</div><div class="s-lbl">Win %</div></div>
     <div class="s-div"></div>
-    <div class="s-item"><div class="s-val" id="bv">0</div><div class="s-lbl">Best</div></div>
+    <div class="s-item" onclick="showRewards()"><div class="s-val" id="bv">0</div><div class="s-lbl">Best &#127942;</div></div>
   </div>
+
+  <!-- MINI STREAK REWARDS -->
+  <div class="streak-rewards" id="streak-rewards-mini">
+    <div class="sr-title">&#127942; Streak Rewards &mdash; tap to view all</div>
+    <div class="sr-grid" id="sr-mini-grid"></div>
+  </div>
+
   <div class="mode-lbl">Choose your game</div>
   <div class="mode-grid">
     <div class="mode-card active" id="mode-pidgin" onclick="selectMode('pidgin')"><span class="m-icon">&#128483;</span><div class="m-name">Pidgin Word</div><div class="m-sub">Guess the word</div></div>
     <div class="mode-card" id="mode-afrobeats" onclick="selectMode('afrobeats')"><span class="m-icon">&#127925;</span><div class="m-name">Afrobeats</div><div class="m-sub">Fill the lyric</div></div>
     <div class="mode-card" id="mode-slang" onclick="selectMode('slang')"><span class="m-icon">&#128172;</span><div class="m-name">Naija Slang</div><div class="m-sub">What e mean?</div></div>
   </div>
+
   <div class="game-card">
     <div id="q-tag" class="q-tag">Pidgin Word</div>
     <div id="q-text" class="q-text"></div>
@@ -189,178 +284,372 @@
     <div id="wordle-section"><div class="wordle-grid" id="wordle-grid"></div><div class="keyboard" id="keyboard"></div></div>
     <div id="options-section" style="display:none"><div class="options-grid" id="options-grid"></div></div>
   </div>
+
   <div class="result-box" id="result-box">
     <div class="r-emoji" id="r-emoji"></div>
     <div class="r-title" id="r-title"></div>
     <div class="r-sub" id="r-sub"></div>
     <div class="r-answer" id="r-answer"></div>
+    <div class="r-unlock" id="r-unlock"></div>
     <div class="r-share" id="r-share"></div>
     <button class="btn-primary" onclick="copyShare()">&#128203; Copy and share</button>
     <div class="btn-row">
-      <button class="btn-ghost" onclick="nextQ()">Next question</button>
+      <button class="btn-ghost" onclick="nextQ()">Next question &#8594;</button>
       <button class="btn-ghost" onclick="showLeaderboard()">&#127942; Leaderboard</button>
     </div>
   </div>
-  <div class="footer"><div class="footer-text">Made with love by <span>Olive</span> · Naija Trivia 2025</div></div>
+  <div class="footer"><div class="footer-text">Made with &#128154; by <strong>Olive Nwaigbo</strong> &middot; Naija Trivia 2025</div></div>
 </div>
 </div>
 
-<!-- LEADERBOARD -->
+<!-- ===================== LEADERBOARD ===================== -->
 <div id="screen-leaderboard" class="screen">
 <div class="wrap">
   <div class="lb-header">
-    <div class="lb-title">&#127942; Leaderboard</div>
-    <button class="lb-back" onclick="showGame()">Back</button>
+    <div>
+      <div class="lb-title">&#127942; <span>Leader</span>board</div>
+      <div class="lb-subtitle">Naija Trivia &mdash; by Olive Nwaigbo</div>
+    </div>
+    <button class="lb-back" onclick="showGame()">&#8592; Back</button>
   </div>
   <div id="supabase-banner" class="setup-banner" style="display:none">
-    <div class="setup-title">Connect Supabase for live scores from all players</div>
+    <div class="setup-title">&#9881; Connect Supabase for live scores from all players</div>
     <div class="setup-text">
-      <strong>Step 1</strong> — Go to <strong>supabase.com</strong>, create a free account, then create a new project.<br/>
-      <strong>Step 2</strong> — In your project go to Settings then API. Copy your Project URL and anon public key.<br/>
-      <strong>Step 3</strong> — In your index.html file find these two lines at the top of the script and replace them:<br/>
-      <span class="setup-code">const SUPABASE_URL = 'https://gisdmdsxnacasjdbcndf.supabase.co';</span>
-      <span class="setup-code">const SUPABASE_KEY = 'sb_publishable_slk1_SXUzCAehzlBAkEGJQ_siqp6SJM';</span>
-      <strong>Step 4</strong> — In Supabase go to SQL Editor and run this to create the scores table:<br/>
+      <strong>Step 1</strong> &mdash; Go to <strong>supabase.com</strong>, sign up free, create a project.<br/>
+      <strong>Step 2</strong> &mdash; Go to Settings &rarr; API. Copy your Project URL and anon public key.<br/>
+      <strong>Step 3</strong> &mdash; In your index.html find and replace these two lines:<br/>
+      <span class="setup-code">const SUPABASE_URL = 'YOUR_SUPABASE_URL';</span>
+      <span class="setup-code">const SUPABASE_KEY = 'YOUR_SUPABASE_ANON_KEY';</span>
+      <strong>Step 4</strong> &mdash; In SQL Editor run this once:<br/>
       <span class="setup-code">create table naija_trivia_scores (player_name text primary key, streak int default 0, wins int default 0, played int default 0, best_streak int default 0, updated_at timestamptz default now());</span>
-      <strong>Step 5</strong> — In Table Editor, open naija_trivia_scores, click RLS and disable it so everyone can read and write.<br/>
-      Until connected, the leaderboard below shows demo data plus your real score!
+      <strong>Step 5</strong> &mdash; Table Editor &rarr; naija_trivia_scores &rarr; disable RLS so all players can read/write.<br/>
+      Until connected, demo scores are shown plus your real data!
     </div>
   </div>
   <div class="lb-tabs">
     <button class="lb-tab active" onclick="switchTab('streak')" id="tab-streak">&#128293; Streak</button>
-    <button class="lb-tab" onclick="switchTab('wins')" id="tab-wins">Wins</button>
-    <button class="lb-tab" onclick="switchTab('played')" id="tab-played">Most Played</button>
+    <button class="lb-tab" onclick="switchTab('wins')" id="tab-wins">&#9989; Wins</button>
+    <button class="lb-tab" onclick="switchTab('played')" id="tab-played">&#127918; Played</button>
   </div>
   <div id="lb-content" class="lb-card"><div class="lb-loading">Loading scores...</div></div>
-  <div class="footer" style="padding-top:16px"><div class="footer-text">Made with love by <span>Olive</span> · Naija Trivia 2025</div></div>
+  <div class="footer" style="padding-top:16px"><div class="footer-text">Made with &#128154; by <strong>Olive Nwaigbo</strong> &middot; Naija Trivia 2025</div></div>
+</div>
+</div>
+
+<!-- ===================== REWARDS ===================== -->
+<div id="screen-rewards" class="screen">
+<div class="wrap">
+  <div class="rw-header">
+    <div>
+      <div class="rw-title">&#127942; <span>Streak</span> Rewards</div>
+    </div>
+    <button class="lb-back" onclick="showGame()">&#8592; Back</button>
+  </div>
+  <div class="rw-subtitle">Build your streak to unlock exclusive Naija titles and bragging rights! Your streak resets if you lose.</div>
+  <div class="rw-grid" id="rw-grid"></div>
+  <div class="footer" style="padding-top:8px"><div class="footer-text">Made with &#128154; by <strong>Olive Nwaigbo</strong> &middot; Naija Trivia 2025</div></div>
 </div>
 </div>
 
 <script>
-var SUPABASE_URL = 'https://gisdmdsxnacasjdbcndf.supabase.co';
-var SUPABASE_KEY = 'sb_publishable_slk1_SXUzCAehzlBAkEGJQ_siqp6SJM';
+/* ============================================================
+   SUPABASE — replace with your values from supabase.com
+============================================================ */
+var SUPABASE_URL = 'YOUR_SUPABASE_URL';
+var SUPABASE_KEY = 'YOUR_SUPABASE_ANON_KEY';
 var SUPABASE_READY = SUPABASE_URL !== 'YOUR_SUPABASE_URL';
 
-var Q = {
-  pidgin: [
-    {word:'SAPA',hint:'4 letters - When your account balance dey cry',clue:'State of extreme financial hardship - every young Nigerian know am'},
-    {word:'JAPA',hint:'4 letters - The great Naija migration abroad',clue:'To flee or relocate abroad in search of a better life'},
-    {word:'WAHALA',hint:'6 letters - Trouble dey sleep yanga go wake am',clue:'Problem or serious trouble - no wahala means no problem'},
-    {word:'OSHEY',hint:'5 letters - This na pure praise',clue:'Pidgin exclamation of praise or approval for someone'},
-    {word:'CHOP',hint:'4 letters - Every Nigerian know this one',clue:'To eat - or to receive or take something like money'},
-    {word:'MENT',hint:'4 letters - Something not right upstairs',clue:'Slang for someone acting crazy or out of character'},
-    {word:'AGIDI',hint:'5 letters - Stubborn like this Naija food',clue:'Solidified corn porridge - also used to mean stubbornness'},
-    {word:'KPOMO',hint:'5 letters - The skin wey sweet pass',clue:'Cowhide - a popular Nigerian delicacy added to soups and stews'},
-    {word:'ABUJA',hint:'5 letters - Na here power dey',clue:'The Federal Capital Territory and seat of government in Nigeria'},
-    {word:'VIBES',hint:'5 letters - Good energy in the atmosphere',clue:'The feeling or atmosphere in a place - the vibes dey means good energy'},
-    {word:'EGUNJE',hint:'6 letters - Under the table payment',clue:'A bribe or unofficial payment - common in Nigerian bureaucracy talk'},
-    {word:'ABEG',hint:'4 letters - Begging with style',clue:'Please - used to beg plead or soften a request in Pidgin'},
-    {word:'GBEGE',hint:'5 letters - When things don scatter',clue:'Serious trouble or a big mess - gbege don happen means trouble has started'},
-    {word:'DANFO',hint:'5 letters - The yellow bus experience in Lagos',clue:'Yellow commercial mini-bus very common on Lagos roads'},
-    {word:'OKADA',hint:'5 letters - Two wheels full speed ahead',clue:'Commercial motorcycle taxi - banned in many Lagos areas but still used'},
-    {word:'SUYA',hint:'4 letters - Roadside grill wey dey call your name',clue:'Spiced grilled meat skewers - a beloved Nigerian street food'},
-    {word:'NAIRA',hint:'5 letters - Our own Nigerian currency',clue:'The official currency of Nigeria'},
-    {word:'SHAKARA',hint:'7 letters - Forming for absolutely no reason',clue:'To show off or behave in a pretentious or affected way'},
-    {word:'GBOSA',hint:'5 letters - The Naija celebration sound',clue:'An exclamation of celebration or victory - like a gun salute in words'},
-    {word:'JOLLOF',hint:'6 letters - The rice wey cause war',clue:'Jollof rice - the beloved Nigerian rice dish always at the center of debate'}
-  ],
-  afrobeats: [
-    {q:"Fill the missing word from Burna Boy's 'Ye':",line1:'"Aye, I no want to die today"',line2:'"If trouble should ___ today"',blank:'come',options:['come','fall','rise','show'],answer:0,explain:"From 'Ye' by Burna Boy (2018). One of the most iconic Afrobeats songs ever made."},
-    {q:"Complete these lines from Wizkid ft. Tems - 'Essence':",line1:'"Baby, I don\'t want to die"',line2:'"I just want to feel your ___ tonight"',blank:'body',options:['body','love','soul','vibes'],answer:0,explain:"'Essence' (2020) off Wizkid's Made in Lagos album. Remixed with Justin Bieber and went global."},
-    {q:"Fill the blank from Davido's 'Fall':",line1:'"I don fall for you, I don fall for you"',line2:'"I just know say I go ___ for you"',blank:'die',options:['die','ride','cry','stay'],answer:0,explain:"'Fall' (2017) became the longest-charting Nigerian pop song on the US Billboard Hot 100."},
-    {q:"Complete Asake's two lines from 'Joha':",line1:'"I am on a new level, oh"',line2:'"You say make I slow down, I say ___ down"',blank:'kneel',options:['kneel','calm','bow','sit'],answer:0,explain:"From 'Joha' by Asake (2022) off his debut Mr Money With The Vibe on YBNL Nation."},
-    {q:"Fill the blank from Tems' 'Free Mind':",line1:'"I wanna feel no more pain"',line2:'"I\'m gonna break these ___ today"',blank:'chains',options:['chains','walls','rules','gates'],answer:0,explain:"'Free Mind' (2020) launched Tems from Lagos to global superstardom. She later won a Grammy."},
-    {q:"Fill the blank from Fireboy DML's 'Peru':",line1:'"I don\'t wanna go to Peru"',line2:'"All I wanna do is ___ with you"',blank:'stay',options:['stay','dance','vibe','ride'],answer:0,explain:"'Peru' (2021) went global after Ed Sheeran jumped on the remix. Charted in 15+ countries."},
-    {q:"Complete these lines from Rema's 'Calm Down':",line1:'"Baby, calm down, calm down"',line2:'"Girl, don\'t be afraid, I go ___ you down"',blank:'slow',options:['slow','hold','put','lay'],answer:0,explain:"'Calm Down' (2022) was remixed with Selena Gomez and became one of the biggest Afrobeats crossovers ever."},
-    {q:"Fill the blank from Olamide's 'Wo!!':",line1:'"Oya jo, make we ___ together"',line2:'"To wa ro, ko si wahala"',blank:'dance',options:['dance','sing','vibe','pray'],answer:0,explain:"'Wo!!' (2016) became one of the biggest street anthems in Nigeria. Ko si wahala means no problem."},
-    {q:"Complete these lines from Ckay's 'Love Nwantiti':",line1:'"I am so obsessed, I want to chop your ___"',line2:'"Make you no go, make you no go"',blank:'body',options:['body','heart','waist','soul'],answer:0,explain:"'Love Nwantiti' by Ckay (2019) became a viral global hit after the TikTok remix in 2021."},
-    {q:"Fill the blank from Yemi Alade's 'Johnny':",line1:'"Johnny, Johnny, Johnny"',line2:'"You took my ___ and you ran away"',blank:'love',options:['love','heart','money','time'],answer:0,explain:"'Johnny' (2014) by Yemi Alade became a pan-African anthem and launched her to continental stardom."},
-    {q:"Complete these lines from Flavour's 'Ada Ada':",line1:'"Ada Ada, you are my everything"',line2:'"I go ___ you for the rest of my life"',blank:'love',options:['love','hold','keep','find'],answer:0,explain:"'Ada Ada' by Flavour N'abania is one of the biggest Igbo-influenced Afrobeats love songs ever made."},
-    {q:"Fill the blank from Patoranking's 'Girlie O':",line1:'"Girlie o, girlie o"',line2:'"Your love dey make me ___ like crazy"',blank:'feel',options:['feel','go','shake','burn'],answer:0,explain:"'Girlie O' is one of Patoranking's early hits that established his dancehall-Afrobeats fusion sound."}
-  ],
-  slang: [
-    {q:"What does 'enter one chance' mean?",options:['Win a lucky prize','Get robbed by criminals disguised as transport','Find an empty seat on a bus','Land an unexpected job'],answer:1,explain:"'One chance' = criminals posing as commercial drivers to rob passengers. A very real Lagos street danger."},
-    {q:"If someone says you are 'shayo', wetin dem mean?",options:['You are stubborn','You are drunk or tipsy','You are very hardworking','You are very fashionable'],answer:1,explain:"Shayo = intoxicated or drunk. 'E don shayo' means he is drunk. From Yoruba into Lagos Pidgin."},
-    {q:"What does 'abi' mean at the end of a sentence?",options:['Immediately','No problem at all','Right? Isn\'t it? - seeking agreement','Finish it now'],answer:2,explain:"'Abi' is a Yoruba-origin tag question in Nigerian Pidgin - like 'right?' e.g. 'E sweet, abi?' means 'It's nice, right?'"},
-    {q:"Someone says 'you don blow' about your friend. Wetin happen?",options:['Your friend got very angry','Your friend became famous or very successful','Your friend travelled abroad','Your friend lost a lot of money'],answer:1,explain:"'Don blow' = became famous or achieved major success. Originated in Nigerian music and spread into everyday speech."},
-    {q:"What does 'ginger' mean as a verb in Nigerian slang?",options:['Add spice to food','Motivate or excite someone','Confuse a person','Steal something quickly'],answer:1,explain:"'Ginger' = to hype up or motivate someone. 'Ginger me abeg' means motivate me please."},
-    {q:"What is 'owambe' in Naija culture?",options:['A traditional Yoruba curse','A big flashy party with aso-ebi','A type of Nigerian pepper soup','A night market in Lagos'],answer:1,explain:"Owambe = a lavish Nigerian party with matching aso-ebi outfits, jollof rice, Fuji music, and heavy dancing."},
-    {q:"When someone says 'e don do', wetin e mean?",options:['He made a serious mistake','It is finished or completely over','He is currently cooking','Something bad just happened'],answer:1,explain:"'E don do' = it is done, finished, or completely over. Used to declare something complete or resolved."},
-    {q:"What does 'see finish' mean in Nigerian slang?",options:['Watch something all the way to the end','Lose respect because someone knows you too well','Finish someone else\'s food','Overstay your welcome at a party'],answer:1,explain:"'See finish' = when familiarity breeds contempt - someone has been around you so much they no longer value you."},
-    {q:"What is 'aso-ebi'?",options:['A Naija insult for bad dressing','Matching fabric worn by family or friends at a celebration','Traditional Igbo funeral food','A type of Hausa praise music'],answer:1,explain:"Aso-ebi = coordinated fabric worn by groups at Nigerian weddings and parties. A beautiful Yoruba cultural tradition."},
-    {q:"If someone says 'I go soon come', what do they really mean in Nigerian time?",options:['Exactly 5 minutes','Could mean 5 minutes to 2 hours - Nigerian time!','They are already waiting downstairs','They have quietly cancelled'],answer:1,explain:"'I go soon come' technically means shortly - but in Nigerian time it could be much, much longer!"},
-    {q:"What does 'runs' mean in Nigerian street slang?",options:['An athletic sprint race','Hustling or side jobs to make money','Running away from something','A morning jogging routine'],answer:1,explain:"'Runs' = any hustle or scheme to make money on the side. 'I dey do runs' means I am out here hustling."},
-    {q:"What does 'packaging' mean in Naija slang?",options:['Wrapping a gift neatly','Presenting a false or exaggerated image of yourself','Preparing jollof rice properly','Packing luggage for a trip'],answer:1,explain:"'Packaging' = creating the impression you are richer or more successful than you actually are. The guy dey package = he is fronting."},
-    {q:"What does 'wash' mean when a Nigerian says 'dem wash am'?",options:['They gave someone a bath','They cheated or completely scammed someone','They cleaned a room thoroughly','They laundered dirty money'],answer:1,explain:"'Wash am' = to scam or deceive someone. 'Dem wash the guy' means they successfully scammed him."},
-    {q:"What is a 'big boy' or 'big girl' in Naija context?",options:['A physically large person','Someone who is wealthy connected or living large','The oldest sibling in a family','A final year university student'],answer:1,explain:"'Big boy or big girl' = someone affluent influential or living luxuriously. 'He don become big boy' means he is now wealthy."}
-  ]
+/* ============================================================
+   SOUND ENGINE — uses Web Audio API, no external files needed
+============================================================ */
+var soundOn = true;
+var AudioCtx = window.AudioContext || window.webkitAudioContext;
+var actx = null;
+
+function getCtx(){if(!actx)actx=new AudioCtx();return actx;}
+
+function playTone(freq,dur,type,vol,delay){
+  try{
+    var ctx=getCtx();
+    var o=ctx.createOscillator();
+    var g=ctx.createGain();
+    o.connect(g);g.connect(ctx.destination);
+    o.type=type||'sine';
+    o.frequency.setValueAtTime(freq,ctx.currentTime+(delay||0));
+    g.gain.setValueAtTime(vol||0.3,ctx.currentTime+(delay||0));
+    g.gain.exponentialRampToValueAtTime(0.001,ctx.currentTime+(delay||0)+dur);
+    o.start(ctx.currentTime+(delay||0));
+    o.stop(ctx.currentTime+(delay||0)+dur+0.05);
+  }catch(e){}
+}
+
+function sndKey(){
+  if(!soundOn)return;
+  playTone(220,0.06,'sine',0.12);
+}
+
+function sndCorrect(){
+  if(!soundOn)return;
+  // Upbeat afrobeats-ish rising notes
+  var notes=[330,392,494,659];
+  notes.forEach(function(f,i){playTone(f,0.18,'sine',0.25,i*0.1);});
+}
+
+function sndWrong(){
+  if(!soundOn)return;
+  playTone(180,0.15,'sawtooth',0.2);
+  playTone(150,0.2,'sawtooth',0.15,0.12);
+}
+
+function sndWin(){
+  if(!soundOn)return;
+  // Celebratory afrobeats fanfare — fast rising chord sequence
+  var melody=[523,659,784,1047,784,1047,1319];
+  melody.forEach(function(f,i){playTone(f,0.2,'sine',0.3,i*0.08);});
+  // bass drum feel
+  playTone(80,0.3,'sine',0.5,0);
+  playTone(80,0.3,'sine',0.4,0.24);
+  playTone(80,0.3,'sine',0.4,0.48);
+}
+
+function sndLose(){
+  if(!soundOn)return;
+  var notes=[400,350,280,200];
+  notes.forEach(function(f,i){playTone(f,0.22,'triangle',0.25,i*0.1);});
+}
+
+function sndStreak(){
+  if(!soundOn)return;
+  // Special sound for streak milestone
+  var notes=[523,659,784,1047,1319,1047,1319,1568];
+  notes.forEach(function(f,i){playTone(f,0.15,'sine',0.35,i*0.07);});
+}
+
+function sndUnlock(){
+  if(!soundOn)return;
+  var notes=[784,1047,1319,1568,1319,1568,2093];
+  notes.forEach(function(f,i){playTone(f,0.12,'sine',0.4,i*0.06);});
+}
+
+function toggleSound(){
+  soundOn=!soundOn;
+  document.getElementById('sound-btn').innerHTML=soundOn?'&#128266;':'&#128263;';
+  try{localStorage.setItem('naija-sound',soundOn?'1':'0');}catch(e){}
+  if(soundOn)sndCorrect();
+}
+
+/* ============================================================
+   STREAK REWARDS
+============================================================ */
+var REWARDS=[
+  {streak:3,  icon:'&#127381;', name:'Fresher',     desc:'You dey try! 3-game streak unlocked your first title.',      color:'#6b7a63'},
+  {streak:5,  icon:'&#128293;', name:'Naija Vibes', desc:'5 in a row! You sabi small small. Keep going!',              color:'#e5970a'},
+  {streak:7,  icon:'&#127775;', name:'Sharp Guy',   desc:'7-game streak! Sharp sharp — your brain dey work!',          color:'#3b82f6'},
+  {streak:10, icon:'&#129351;', name:'Eko Legend',  desc:'10 straight! You don blow! Lagos proud of you.',             color:'#2d7a3a'},
+  {streak:15, icon:'&#128081;', name:'Naija Royalty',desc:'15 in a row! Na king/queen you be. Bow down.',              color:'#7c3aed'},
+  {streak:20, icon:'&#127942;', name:'Trivia God',  desc:'20-game streak! You don reach deity level. Gbosa for you!',  color:'#dc2626'},
+  {streak:30, icon:'&#128126;', name:'Naija Oracle', desc:'30 in a row! Abeg who are you?! Certified Naija Oracle!',   color:'#1a1a1a'},
+  {streak:50, icon:'&#127760;', name:'African Giant',desc:'50 straight! You are THE African Giant. Undisputed.',       color:'#2d7a3a'},
+];
+
+function getCurrentReward(streak){
+  var reward=null;
+  for(var i=0;i<REWARDS.length;i++){if(streak>=REWARDS[i].streak)reward=REWARDS[i];}
+  return reward;
+}
+
+function getNextReward(streak){
+  for(var i=0;i<REWARDS.length;i++){if(streak<REWARDS[i].streak)return REWARDS[i];}
+  return null;
+}
+
+function renderRewardsScreen(){
+  var streak=st.stats.streak;
+  var grid=document.getElementById('rw-grid');
+  grid.innerHTML=REWARDS.map(function(r){
+    var unlocked=streak>=r.streak;
+    var isNext=!unlocked&&(getNextReward(streak)&&getNextReward(streak).streak===r.streak);
+    var pct=Math.min(100,Math.round((streak/r.streak)*100));
+    var cls='rw-card'+(unlocked?' unlocked':isNext?' next-up':' locked');
+    return '<div class="'+cls+'">'
+      +(unlocked?'<div class="rw-unlocked-tag">UNLOCKED</div>':'')
+      +'<span class="rw-big-icon">'+r.icon+'</span>'
+      +'<div class="rw-name">'+r.name+'</div>'
+      +'<div class="rw-desc">'+r.desc+'</div>'
+      +'<div class="rw-prog"><div class="rw-prog-fill'+(isNext?' orange':'')+'" style="width:'+pct+'%"></div></div>'
+      +'<div class="rw-req">'+(unlocked?'&#9989; Unlocked!':'Need '+r.streak+' streak (you have '+streak+')')+'</div>'
+      +'</div>';
+  }).join('');
+}
+
+function renderMiniRewards(){
+  var streak=st.stats.streak;
+  var grid=document.getElementById('sr-mini-grid');
+  var show=REWARDS.slice(0,4);
+  grid.innerHTML=show.map(function(r){
+    var unlocked=streak>=r.streak;
+    var isNext=!unlocked&&(getNextReward(streak)&&getNextReward(streak).streak===r.streak);
+    return '<div class="sr-item'+(unlocked?' unlocked':isNext?' next-up':'')+'" onclick="showRewards()">'
+      +(unlocked?'':'<div class="sr-lock">&#128274;</div>')
+      +'<div class="sr-icon">'+r.icon+'</div>'
+      +'<div class="sr-name">'+r.name+'</div>'
+      +'<div class="sr-req">'+(unlocked?'<span class="sr-badge">UNLOCKED</span>':'Need '+r.streak)+'</div>'
+      +'</div>';
+  }).join('');
+  document.getElementById('streak-rewards-mini').onclick=showRewards;
+}
+
+/* ============================================================
+   QUESTION BANK — 30+ per mode
+============================================================ */
+var Q={
+pidgin:[
+  {word:'SAPA',   hint:'4 letters - When your account balance dey cry',         clue:'State of extreme financial hardship — every young Nigerian know am'},
+  {word:'JAPA',   hint:'4 letters - The great Naija migration abroad',           clue:'To flee or relocate abroad in search of a better life'},
+  {word:'WAHALA', hint:'6 letters - Trouble dey sleep yanga go wake am',         clue:'Problem or serious trouble — no wahala means no problem'},
+  {word:'OSHEY',  hint:'5 letters - This na pure praise',                        clue:'Pidgin exclamation of praise or approval for someone'},
+  {word:'CHOP',   hint:'4 letters - Every Nigerian know this one',               clue:'To eat — or to receive or take something like money'},
+  {word:'MENT',   hint:'4 letters - Something not right upstairs',               clue:'Slang for someone acting crazy or out of character'},
+  {word:'AGIDI',  hint:'5 letters - Stubborn like this Naija food',              clue:'Solidified corn porridge — also means stubbornness'},
+  {word:'KPOMO',  hint:'5 letters - The skin wey sweet pass',                    clue:'Cowhide — a popular Nigerian delicacy added to soups and stews'},
+  {word:'ABUJA',  hint:'5 letters - Na here power dey',                          clue:'The Federal Capital Territory and seat of government in Nigeria'},
+  {word:'VIBES',  hint:'5 letters - Good energy in the atmosphere',              clue:'The feeling in a place — the vibes dey means good energy'},
+  {word:'EGUNJE', hint:'6 letters - Under the table payment',                    clue:'A bribe or unofficial payment — common in Nigerian bureaucracy'},
+  {word:'ABEG',   hint:'4 letters - Begging with style',                         clue:'Please — used to beg plead or soften a request in Pidgin'},
+  {word:'GBEGE',  hint:'5 letters - When things don scatter',                    clue:'Serious trouble or a big mess — gbege don happen means trouble started'},
+  {word:'DANFO',  hint:'5 letters - The yellow bus experience in Lagos',         clue:'Yellow commercial mini-bus very common on Lagos roads'},
+  {word:'OKADA',  hint:'5 letters - Two wheels full speed ahead',                clue:'Commercial motorcycle taxi — banned in many Lagos areas but still used'},
+  {word:'SUYA',   hint:'4 letters - Roadside grill wey dey call your name',     clue:'Spiced grilled meat skewers — a beloved Nigerian street food'},
+  {word:'NAIRA',  hint:'5 letters - Our own Nigerian currency',                  clue:'The official currency of Nigeria'},
+  {word:'SHAKARA',hint:'7 letters - Forming for absolutely no reason',           clue:'To show off or behave in a pretentious or affected way'},
+  {word:'GBOSA',  hint:'5 letters - The Naija celebration sound',                clue:'An exclamation of celebration or victory — like a gun salute in words'},
+  {word:'JOLLOF', hint:'6 letters - The rice wey cause war',                     clue:'Jollof rice — the beloved Nigerian rice dish always at the center of debate'},
+  {word:'AMEBO',  hint:'5 letters - Them know everybody business',               clue:'A gossip or nosy person who spreads other peoples business'},
+  {word:'WAKA',   hint:'4 letters - Move from here abeg',                        clue:'To walk or go away — waka means leave or get moving'},
+  {word:'OSHA',   hint:'4 letters - Clean and fresh to death',                   clue:'Slang for looking very clean well dressed and attractive'},
+  {word:'IDAN',   hint:'4 letters - Na magic level this one be',                 clue:'Someone exceptional or doing extraordinary things — supernatural level'},
+  {word:'MUMU',   hint:'4 letters - Innocence wey go far',                       clue:'A naive gullible or foolish person — easily deceived or tricked'},
+  {word:'RUNS',   hint:'4 letters - Hustle wey get levels',                      clue:'Side hustle or scheme to make money — could be legitimate or shady'},
+  {word:'AREA',   hint:'4 letters - The boys know this',                         clue:'Your neighbourhood or local territory — my area means my hood'},
+  {word:'GIST',   hint:'4 letters - Talk and gist me something',                 clue:'Gossip news or a conversation — share the gist means tell me the story'},
+  {word:'BELE',   hint:'4 letters - Roundness in Pidgin',                        clue:'Stomach or belly — my bele dey do me means my stomach is troubling me'},
+  {word:'EHEN',   hint:'4 letters - The punctuation of Naija talk',              clue:'Exclamation meaning yes exactly I knew it or now I remember'},
+  {word:'KPERE',  hint:'5 letters - Finish completely nothing left',             clue:'Completely finished or exhausted — money don kpere means money is done'},
+  {word:'OJORO',  hint:'5 letters - Not playing fair at all',                    clue:'Cheating or corruption especially in a game or competition'},
+],
+afrobeats:[
+  {q:"Fill the missing word from Burna Boy's 'Ye':",line1:'"Aye, I no want to die today"',line2:'"If trouble should ___ today"',blank:'come',options:['come','fall','rise','show'],answer:0,explain:"From 'Ye' by Burna Boy (2018). One of the most iconic Afrobeats songs ever made."},
+  {q:"Complete these lines from Wizkid ft. Tems - 'Essence':",line1:'"Baby, I don\'t want to die"',line2:'"I just want to feel your ___ tonight"',blank:'body',options:['body','love','soul','vibes'],answer:0,explain:"'Essence' (2020) from Made in Lagos. Remixed with Justin Bieber and went global."},
+  {q:"Fill the blank from Davido's 'Fall':",line1:'"I don fall for you, I don fall for you"',line2:'"I just know say I go ___ for you"',blank:'die',options:['die','ride','cry','stay'],answer:0,explain:"'Fall' (2017) became the longest-charting Nigerian pop song on the US Billboard Hot 100."},
+  {q:"Complete Asake's two lines from 'Joha':",line1:'"I am on a new level, oh"',line2:'"You say make I slow down, I say ___ down"',blank:'kneel',options:['kneel','calm','bow','sit'],answer:0,explain:"From 'Joha' by Asake (2022) off his debut Mr Money With The Vibe on YBNL."},
+  {q:"Fill the blank from Tems' 'Free Mind':",line1:'"I wanna feel no more pain"',line2:'"I\'m gonna break these ___ today"',blank:'chains',options:['chains','walls','rules','gates'],answer:0,explain:"'Free Mind' (2020) launched Tems from Lagos to global superstardom. She later won a Grammy."},
+  {q:"Fill the blank from Fireboy DML's 'Peru':",line1:'"I don\'t wanna go to Peru"',line2:'"All I wanna do is ___ with you"',blank:'stay',options:['stay','dance','vibe','ride'],answer:0,explain:"'Peru' (2021) went global after Ed Sheeran jumped on the remix."},
+  {q:"Complete these lines from Rema's 'Calm Down':",line1:'"Baby, calm down, calm down"',line2:'"Girl, don\'t be afraid, I go ___ you down"',blank:'slow',options:['slow','hold','put','lay'],answer:0,explain:"'Calm Down' (2022) was remixed with Selena Gomez and became one of the biggest Afrobeats crossovers ever."},
+  {q:"Fill the blank from Olamide's 'Wo!!':",line1:'"Oya jo, make we ___ together"',line2:'"To wa ro, ko si wahala"',blank:'dance',options:['dance','sing','vibe','pray'],answer:0,explain:"'Wo!!' (2016) became one of the biggest street anthems in Nigeria."},
+  {q:"Complete these lines from Ckay's 'Love Nwantiti':",line1:'"I am so obsessed, I want to chop your ___"',line2:'"Make you no go, make you no go"',blank:'body',options:['body','heart','waist','soul'],answer:0,explain:"'Love Nwantiti' (2019) became a viral global hit after the TikTok remix in 2021."},
+  {q:"Fill the blank from Yemi Alade's 'Johnny':",line1:'"Johnny, Johnny, Johnny"',line2:'"You took my ___ and you ran away"',blank:'love',options:['love','heart','money','time'],answer:0,explain:"'Johnny' (2014) by Yemi Alade became a pan-African anthem and launched her to continental stardom."},
+  {q:"Complete these lines from Flavour's 'Ada Ada':",line1:'"Ada Ada, you are my everything"',line2:'"I go ___ you for the rest of my life"',blank:'love',options:['love','hold','keep','find'],answer:0,explain:"'Ada Ada' by Flavour N'abania is one of the biggest Igbo-influenced Afrobeats love songs ever."},
+  {q:"Fill the blank from Patoranking's 'Girlie O':",line1:'"Girlie o, girlie o"',line2:'"Your love dey make me ___ like crazy"',blank:'feel',options:['feel','go','shake','burn'],answer:0,explain:"'Girlie O' established Patoranking's unique dancehall-Afrobeats fusion sound."},
+  {q:"Complete these lines from Omah Lay's 'Understand':",line1:'"I know you want my body"',line2:'"I know you want me to ___ your mind"',blank:'blow',options:['blow','touch','ease','read'],answer:0,explain:"'Understand' (2020) by Omah Lay was one of the breakout hits of the pandemic era."},
+  {q:"Fill the blank from Simi's 'Duduke':",line1:'"Duduke, I feel it in my chest"',line2:'"Every time that you ___ me"',blank:'hold',options:['hold','call','see','touch'],answer:0,explain:"'Duduke' (2020) by Simi was written for her unborn daughter and became a massive love anthem."},
+  {q:"Complete these lines from Adekunle Gold's 'Orente':",line1:'"Orente, oya wole"',line2:'"Fine girl no ___ abeg"',blank:'pimple',options:['pimple','wahala','drama','makeup'],answer:0,explain:"'Orente' (2016) by Adekunle Gold was a massive hit that launched his solo career. Orente means elegant lady."},
+  {q:"Fill the blank from Zlatan's 'Able God':",line1:'"Able God I know say you able o"',line2:'"Make you ___ all my enemies"',blank:'scatter',options:['scatter','destroy','finish','silence'],answer:0,explain:"'Able God' (2018) by Zlatan ft. Chinko Ekun and Oberz became a huge street anthem across Nigeria."},
+  {q:"Complete these lines from Mr Eazi's 'Leg Over':",line1:'"This girl na wa o"',line2:'"She give me ___ over"',blank:'leg',options:['leg','head','fall','love'],answer:0,explain:"'Leg Over' (2016) by Mr Eazi became a massive Afrobeats crossover hit across Africa and the UK."},
+  {q:"Fill the blank from Kizz Daniel's 'Buga':",line1:'"Low low low low"',line2:'"___ low, nobody go do you anything"',blank:'Buga',options:['Buga','Dance','Shake','Move'],answer:0,explain:"'Buga' (2022) by Kizz Daniel ft. Tekno became one of the most viral Afrobeats songs of 2022."},
+  {q:"Complete these lines from Davido's 'Aye':",line1:'"For the rest of my life"',line2:'"I swear you\'re gonna be my ___"',blank:'wife',options:['wife','light','life','ride'],answer:0,explain:"'Aye' (2014) by Davido was one of his earliest massive hits and a classic Nigerian love song."},
+  {q:"Fill the blank from Burna Boy's 'Last Last':",line1:'"Na everybody go chop breakfast"',line2:'"___ last, you go do am"',blank:'Last',options:['Last','For','After','Come'],answer:0,explain:"'Last Last' (2022) by Burna Boy samples Toni Braxton and became one of his biggest global hits."},
+  {q:"Complete these lines from Tems ft. Future - 'Wait for U':",line1:'"I\'d wait for you till the war is done"',line2:'"Faithful to you till the sun ___ down"',blank:'goes',options:['goes','falls','burns','fades'],answer:0,explain:"'Wait For U' (2022) by Future ft. Drake and Tems reached No.1 on the Billboard Hot 100, making Tems the first Nigerian woman to achieve this."},
+  {q:"Fill the blank from Seun Kuti's 'African Dreams':",line1:'"We are the children of Africa"',line2:'"Fighting to keep our ___ alive"',blank:'dreams',options:['dreams','culture','lands','pride'],answer:0,explain:"Seun Kuti is the son of Afrobeat legend Fela Kuti and continues his father's legacy of political music."},
+  {q:"Complete these lines from Tekno's 'Pana':",line1:'"Pana, pana"',line2:'"Girl you make me feel like I wanna ___"',blank:'dance',options:['dance','fly','fall','sing'],answer:0,explain:"'Pana' (2016) by Tekno was one of the biggest Afrobeats crossover hits, topping charts across Africa."},
+  {q:"Fill the blank from Oxlade's 'Ku Lo Sa':",line1:'"Baby, don\'t say that you love me"',line2:'"If you no go ___ yourself"',blank:'give',options:['give','love','show','trust'],answer:0,explain:"'Ku Lo Sa' by Oxlade went viral on TikTok in 2022 and became a global sensation, charting in multiple countries."},
+  {q:"Complete these lines from Ayra Starr's '19 & Dangerous':",line1:'"I\'m 19 and dangerous"',line2:'"Got me feeling ___ and famous"',blank:'rich',options:['rich','bold','free','young'],answer:0,explain:"Ayra Starr released her debut album '19 & Dangerous' in 2021, establishing herself as one of Afrobeats' brightest stars."},
+  {q:"Fill the blank from P-Square's 'Personally':",line1:'"I go love you, I go love you"',line2:'"___, personally, personally"',blank:'Personally',options:['Personally','Sincerely','Truly','Deeply'],answer:0,explain:"'Personally' by P-Square is one of the duo's biggest hits. Peter and Paul Okoye were one of the biggest acts in African music."},
+  {q:"Complete these lines from Fela Kuti's 'Zombie':",line1:'"Zombie no go go unless you tell am to go"',line2:'"Zombie no go ___ unless you tell am to stop"',blank:'stop',options:['stop','think','run','talk'],answer:0,explain:"'Zombie' (1976) by Fela Kuti was a biting satire of the Nigerian military, leading to a brutal attack on his compound by soldiers."},
+  {q:"Fill the blank from Dbanj's 'Oliver Twist':",line1:'"She want more, more, more"',line2:'"___ Twist she want more"',blank:'Oliver',options:['Oliver','Little','Pretty','Lovely'],answer:0,explain:"'Oliver Twist' (2012) by D'banj featuring Don Jazzy became a crossover hit in the UK, reaching the top 10."},
+  {q:"Complete these lines from Tiwa Savage's 'Kele Kele Love':",line1:'"I had to give you kele kele love"',line2:'"I know you\'re caught up in a ___"',blank:'rush',options:['rush','game','trance','spell'],answer:0,explain:"'Kele Kele Love' (2011) was Tiwa Savage's debut single, a massive hit that launched her music career after years as a songwriter."},
+  {q:"Fill the blank from Mohbad's 'Feel Good':",line1:'"I just want to feel good"',line2:'"With you I always feel ___"',blank:'good',options:['good','fine','free','loved'],answer:0,explain:"Mohbad was a talented Nigerian street-pop artist whose tragic death in 2023 led to an outpouring of grief across Nigeria and the world."},
+],
+slang:[
+  {q:"What does 'enter one chance' mean?",options:['Win a lucky prize','Get robbed by criminals disguised as transport','Find an empty seat on a bus','Land an unexpected job'],answer:1,explain:"'One chance' = criminals posing as commercial drivers to rob passengers. A very real Lagos street danger."},
+  {q:"If someone says you are 'shayo', wetin dem mean?",options:['You are stubborn','You are drunk or tipsy','You are very hardworking','You are very fashionable'],answer:1,explain:"Shayo = intoxicated or drunk. 'E don shayo' means he is drunk. From Yoruba into Lagos Pidgin."},
+  {q:"What does 'abi' mean at the end of a sentence?",options:['Immediately','No problem at all','Right? Isn\'t it? — seeking agreement','Finish it now'],answer:2,explain:"'Abi' is a Yoruba-origin tag question in Nigerian Pidgin — like 'right?' e.g. 'E sweet, abi?'"},
+  {q:"Someone says 'you don blow' about your friend. Wetin happen?",options:['Your friend got very angry','Your friend became famous or very successful','Your friend travelled abroad','Your friend lost a lot of money'],answer:1,explain:"'Don blow' = became famous or achieved major success. From the Nigerian music industry into everyday speech."},
+  {q:"What does 'ginger' mean as a verb in Nigerian slang?",options:['Add spice to food','Motivate or excite someone','Confuse a person','Steal something quickly'],answer:1,explain:"'Ginger' = to hype up or motivate someone. 'Ginger me abeg' means motivate me please."},
+  {q:"What is 'owambe' in Naija culture?",options:['A traditional Yoruba curse','A big flashy party with aso-ebi','A type of Nigerian pepper soup','A night market in Lagos'],answer:1,explain:"Owambe = a lavish Nigerian party with matching aso-ebi outfits, jollof rice, Fuji music, and heavy dancing."},
+  {q:"When someone says 'e don do', wetin e mean?",options:['He made a serious mistake','It is finished or completely over','He is currently cooking','Something bad just happened'],answer:1,explain:"'E don do' = it is done, finished, or completely over. Used to declare something complete or resolved."},
+  {q:"What does 'see finish' mean in Nigerian slang?",options:['Watch something all the way to the end','Lose respect because someone knows you too well','Finish someone else food','Overstay your welcome at a party'],answer:1,explain:"'See finish' = when familiarity breeds contempt — someone has seen you so much they no longer value you."},
+  {q:"What is 'aso-ebi'?",options:['A Naija insult for bad dressing','Matching fabric worn by family or friends at a celebration','Traditional Igbo funeral food','A type of Hausa praise music'],answer:1,explain:"Aso-ebi = coordinated fabric worn by groups at Nigerian weddings and parties. A beautiful Yoruba tradition."},
+  {q:"If someone says 'I go soon come', what do they really mean in Nigerian time?",options:['Exactly 5 minutes','Could mean 5 minutes to 2 hours — Nigerian time!','They are already waiting downstairs','They have quietly cancelled'],answer:1,explain:"'I go soon come' technically means shortly — but in Nigerian time it could be much, much longer!"},
+  {q:"What does 'runs' mean in Nigerian street slang?",options:['An athletic sprint race','Hustling or side jobs to make money','Running away from something','A morning jogging routine'],answer:1,explain:"'Runs' = any hustle or scheme to make money on the side. 'I dey do runs' means I am out here hustling."},
+  {q:"What does 'packaging' mean in Naija slang?",options:['Wrapping a gift neatly','Presenting a false or exaggerated image of yourself','Preparing jollof rice properly','Packing luggage for a trip'],answer:1,explain:"'Packaging' = creating the impression you are richer or more successful than you actually are."},
+  {q:"What does 'wash' mean when a Nigerian says 'dem wash am'?",options:['They gave someone a bath','They cheated or completely scammed someone','They cleaned a room thoroughly','They laundered dirty money'],answer:1,explain:"'Wash am' = to scam or deceive someone. 'Dem wash the guy' means they successfully scammed him."},
+  {q:"What is a 'big boy' or 'big girl' in Naija context?",options:['A physically large person','Someone who is wealthy connected or living large','The oldest sibling in a family','A final year university student'],answer:1,explain:"'Big boy or big girl' = someone affluent, influential, or living luxuriously."},
+  {q:"What does 'idan' mean in current Nigerian youth slang?",options:['An elderly wise man','Someone extraordinarily talented or doing supernatural things','A traditional herbalist','An internet fraudster'],answer:1,explain:"'Idan' = a magical extraordinary person. Popularised by Portable's music, it means someone operating at a supernatural level of excellence."},
+  {q:"What does 'omo' mean in Pidgin?",options:['Only a female child','A general exclamation of surprise or emphasis — like wow','A word for money','A way to call your enemy'],answer:1,explain:"'Omo' is a highly versatile Pidgin word used to express surprise, emphasis, or just fill a sentence. 'Omo that thing sweet!' means 'Wow that was great!'"},
+  {q:"What is 'amebo' in Nigerian slang?",options:['A type of Igbo soup','A gossip or busybody who spreads other people business','A kind Nigerian greeting','A traditional musical instrument'],answer:1,explain:"Amebo = a gossip or nosy person. 'Don\'t be amebo' means mind your own business."},
+  {q:"What does 'e go be' mean?",options:['It is already done','It will happen eventually — things will work out','It is impossible','It is none of your business'],answer:1,explain:"'E go be' = it will happen, things will fall into place. A very optimistic Naija phrase rooted in resilience and faith."},
+  {q:"What is 'eba' in Nigerian food culture?",options:['A type of Yoruba praise song','Garri stirred in hot water to make a thick dough eaten with soup','A popular Lagos street food vendor','A Nigerian energy drink'],answer:1,explain:"Eba is one of Nigeria's most popular staple foods — garri (cassava flakes) mixed in hot water. Eaten with egusi, okra, or any Nigerian soup."},
+  {q:"What does 'shine your eyes' mean in Naija?",options:['Wear beautiful eye makeup','Be alert, smart, and don\'t get deceived','Show off your success to others','Look directly at someone when speaking'],answer:1,explain:"'Shine your eyes' = be vigilant, wise, and don\'t be naive. 'Shine your eye before dem chop you' = be careful before they scam you."},
+  {q:"What is 'gbagbe oshi' in Yoruba-Pidgin slang?",options:['Remember the past','Forget the nonsense and move on','A farewell greeting','A call to celebrate'],answer:1,explain:"'Gbagbe oshi' = forget the rubbish or let it go. Used to dismiss negativity or tell someone to stop being dramatic."},
+  {q:"What does 'sharp guy' mean in Nigerian slang?",options:['A physically fit person','Someone who is clever, street-smart, and always on top of situations','A rude aggressive man','A very thin person'],answer:1,explain:"'Sharp guy' = someone who is witty, quick-thinking, and always knows how to navigate any situation to their advantage."},
+  {q:"What does 'osu' or 'oshi' mean as an exclamation?",options:['A greeting to an elder','An expression of frustration, dismissal, or mild insult','A Nigerian prayer','A form of traditional greeting'],answer:1,explain:"'Oshi' is used to express frustration or dismiss someone rudely. 'You be oshi' is a mild insult meaning you are an idiot or nuisance."},
+  {q:"What is 'chilling' in Nigerian youth culture?",options:['Being very cold','Relaxing, doing nothing stressful, just existing peacefully','Freezing food in the fridge','Wearing cool clothes'],answer:1,explain:"'Chilling' in Nigerian slang = relaxing, taking it easy, or hanging out casually. 'I dey chill' means I am just relaxing."},
+  {q:"What does 'they are not the same' mean on Nigerian social media?",options:['Two people had a disagreement','Expressing that someone or something is on a completely superior level','Noting a factual difference between two items','A legal dispute between parties'],answer:1,explain:"'They are not the same' is a viral Nigerian phrase used to praise someone who is operating at a level far above others. Supreme compliment!"},
+  {q:"What is 'bendova' in Naija lingo?",options:['A type of Nigerian fabric','A dance move where you bend at the waist','A slang for a luxury car','A popular Lagos restaurant'],answer:1,explain:"Bendova = the dance move popularised by Poco Lee and Zlatan where you bend forward dramatically. Became a viral dance challenge."},
+  {q:"What does 'them don spoil am' mean?",options:['The food is no longer fresh','Someone has been given too much praise or money and is now acting entitled','A product is broken beyond repair','Someone has been exposed publicly'],answer:1,explain:"'Them don spoil am' = they have spoiled him or her with attention, money, or praise so now the person is acting too big for their boots."},
+  {q:"What is 'owu' in Naija street talk?",options:['A type of traditional Yoruba cloth','A spiritual trance or spiritual attack','Fear or cowardice — being scared','A popular Nigerian dance'],answer:2,explain:"'Owu' means fear or cowardice in Nigerian street talk. 'No get owu' means be fearless or don't be scared."},
+  {q:"What does 'e don cast' mean in Nigerian slang?",options:['The movie has been cast with actors','Someone has been exposed or their secret is out','A fishing net has been thrown','A spell has been placed on someone'],answer:1,explain:"'E don cast' = it has been exposed or revealed. Used when someone's secret or mistake is now public knowledge."},
+  {q:"What is 'belle' in Nigerian Pidgin?",options:['A beautiful woman','The stomach or belly — also used to mean pregnancy informally','A doorbell','A church bell used in services'],answer:1,explain:"'Belle' in Pidgin = stomach or belly. 'Her belle don show' informally means her pregnancy is now visible."},
+  {q:"What does 'jagajaga' mean in Nigerian slang?",options:['A type of fabric pattern','A state of total disorder chaos or mess','A popular dance from the south','A Naija insult for a bad cook'],answer:1,explain:"'Jagajaga' = completely messed up, chaotic, or in disorder. Famously used by Eedris Abdulkareem in his political song criticising Nigeria."},
+  {q:"What does 'on a low' mean in Nigerian youth speak?",options:['Feeling very depressed','Doing something quietly or secretly without drawing attention','Speaking in a low voice','Having low energy or battery'],answer:1,explain:"'On a low' = doing something discreetly or quietly. 'I dey do am on a low' means I am doing it secretly or without making it obvious."},
+]
 };
 
-var playerName = '';
-var currentTab = 'streak';
-var st = {
+/* ============================================================
+   GAME STATE
+============================================================ */
+var playerName='';
+var currentTab='streak';
+var st={
   mode:'pidgin',answered:false,guesses:[],cur:'',maxG:6,
   tries:0,keyS:{},shareEmoji:'',
   idx:{pidgin:0,afrobeats:0,slang:0},
   stats:{streak:0,played:0,wins:0,best:0}
 };
 
+/* ============================================================
+   SUPABASE
+============================================================ */
 async function sbFetch(path,opts){
-  opts = opts||{};
-  if(!SUPABASE_READY) return null;
+  opts=opts||{};
+  if(!SUPABASE_READY)return null;
   try{
-    var res = await fetch(SUPABASE_URL+'/rest/v1/'+path,{
+    var res=await fetch(SUPABASE_URL+'/rest/v1/'+path,{
       headers:{'apikey':SUPABASE_KEY,'Authorization':'Bearer '+SUPABASE_KEY,'Content-Type':'application/json','Prefer':opts.prefer||'return=representation'},
-      method:opts.method||'GET',
-      body:opts.body||undefined
+      method:opts.method||'GET',body:opts.body||undefined
     });
-    if(!res.ok) return null;
+    if(!res.ok)return null;
     return await res.json();
   }catch(e){return null;}
 }
 
-async function upsertScore() {
-  if (!SUPABASE_READY || !playerName) {
-    console.log("Supabase not ready or no name");
-    return;
-  }
-
-  try {
-    const response = await fetch(
-      SUPABASE_URL + "/rest/v1/naija_trivia_scores",
-      {
-        method: "POST",
-        headers: {
-          "apikey": SUPABASE_KEY,
-          "Authorization": "Bearer " + SUPABASE_KEY,
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify([{
-          player_name: playerName,
-          streak: st.stats.streak,
-          wins: st.stats.wins,
-          played: st.stats.played,
-          best_streak: st.stats.best,
-          updated_at: new Date().toISOString()
-        }])
-      }
-    );
-
-    const text = await response.text();
-    console.log("Supabase response:", text);
-
-  } catch (error) {
-    console.error("Save failed:", error);
-  }
+async function upsertScore(){
+  if(!SUPABASE_READY||!playerName)return;
+  await sbFetch('naija_trivia_scores?on_conflict=player_name',{
+    method:'POST',prefer:'resolution=merge-duplicates,return=representation',
+    body:JSON.stringify({player_name:playerName,streak:st.stats.streak,wins:st.stats.wins,played:st.stats.played,best_streak:st.stats.best,updated_at:new Date().toISOString()})
+  });
 }
 
-
 async function fetchLeaderboard(sortBy){
-  if(!SUPABASE_READY) return null;
-  var col = sortBy==='streak'?'streak':sortBy==='wins'?'wins':'played';
+  if(!SUPABASE_READY)return null;
+  var col=sortBy==='streak'?'streak':sortBy==='wins'?'wins':'played';
   return await sbFetch('naija_trivia_scores?select=player_name,streak,wins,played,best_streak&order='+col+'.desc&limit=20');
 }
 
+/* ============================================================
+   SCREENS
+============================================================ */
 function showScreen(id){
   document.querySelectorAll('.screen').forEach(function(s){s.classList.remove('active');});
   document.getElementById('screen-'+id).classList.add('active');
@@ -368,97 +657,95 @@ function showScreen(id){
 }
 
 function startGame(){
-  var val = document.getElementById('player-name-input').value.trim();
+  var val=document.getElementById('player-name-input').value.trim();
   if(!val){showToast('Enter your name abeg!');return;}
-  playerName = val;
+  playerName=val;
   try{localStorage.setItem('naija-trivia-name',playerName);}catch(e){}
-  document.getElementById('player-name-display').textContent = playerName;
+  document.getElementById('player-name-display').textContent=playerName;
   showScreen('game');
   loadStats();
   init();
 }
 
-function showLeaderboard(){
-  showScreen('leaderboard');
-  if(!SUPABASE_READY){
-    document.getElementById('supabase-banner').style.display='block';
-    renderFakeLeaderboard(currentTab);
-  }else{
-    loadLeaderboard(currentTab);
-  }
-}
-
+function showLeaderboard(){showScreen('leaderboard');if(!SUPABASE_READY){document.getElementById('supabase-banner').style.display='block';renderFakeLeaderboard(currentTab);}else{loadLeaderboard(currentTab);}}
 function showGame(){showScreen('game');}
+function showRewards(){renderRewardsScreen();showScreen('rewards');}
 
+/* ============================================================
+   LEADERBOARD
+============================================================ */
 function switchTab(tab){
-  currentTab = tab;
+  currentTab=tab;
   document.querySelectorAll('.lb-tab').forEach(function(t){t.classList.remove('active');});
   document.getElementById('tab-'+tab).classList.add('active');
-  if(!SUPABASE_READY) renderFakeLeaderboard(tab);
-  else loadLeaderboard(tab);
+  if(!SUPABASE_READY)renderFakeLeaderboard(tab);else loadLeaderboard(tab);
 }
 
 async function loadLeaderboard(tab){
   document.getElementById('lb-content').innerHTML='<div class="lb-loading">Loading scores...</div>';
-  var data = await fetchLeaderboard(tab);
+  var data=await fetchLeaderboard(tab);
   if(!data){renderFakeLeaderboard(tab);return;}
   renderLeaderboard(data,tab);
 }
 
 function renderLeaderboard(data,tab){
-  var col = tab==='streak'?'streak':tab==='wins'?'wins':'played';
-  var lbl = tab==='streak'?'streak':tab==='wins'?'wins':'played';
-  var card = document.getElementById('lb-content');
-  if(!data||data.length===0){card.innerHTML='<div class="lb-empty">No scores yet - be the first!</div>';return;}
-  var rows = data.slice();
+  var col=tab==='streak'?'streak':tab==='wins'?'wins':'played';
+  var lbl=tab==='streak'?'streak':tab==='wins'?'wins':'played';
+  var card=document.getElementById('lb-content');
+  if(!data||data.length===0){card.innerHTML='<div class="lb-empty">No scores yet — be the first! &#128640;</div>';return;}
+  var rows=data.slice();
   if(!rows.find(function(r){return r.player_name===playerName;})){
     rows.push({player_name:playerName,streak:st.stats.streak,wins:st.stats.wins,played:st.stats.played,best_streak:st.stats.best});
     rows.sort(function(a,b){return b[col]-a[col];});
   }
-  var medals = ['&#129351;','&#129352;','&#129353;'];
-  card.innerHTML = rows.map(function(r,i){
-    var isMe = r.player_name===playerName;
-    var rank = i<3?medals[i]:(i+1);
-    var initials = r.player_name.slice(0,2).toUpperCase();
-    var val = r[col]||0;
-    return '<div class="lb-row'+(isMe?' me':'')+'"><div class="lb-rank">'+rank+'</div><div class="lb-avatar">'+initials+'</div><div class="lb-name">'+r.player_name+(isMe?'<span class="lb-you">You</span>':'')+'</div><div class="lb-score"><div class="lb-score-val">'+val+'</div><div class="lb-score-lbl">'+lbl+'</div></div></div>';
+  var medals=['&#129351;','&#129352;','&#129353;'];
+  card.innerHTML=rows.map(function(r,i){
+    var isMe=r.player_name===playerName;
+    var rank=i<3?medals[i]:(i+1);
+    var initials=r.player_name.slice(0,2).toUpperCase();
+    var val=r[col]||0;
+    var reward=getCurrentReward(r.best_streak||r.streak||0);
+    var titleTag=reward?'<span class="lb-badge-tag lb-title-tag">'+reward.icon+' '+reward.name+'</span>':'';
+    var youTag=isMe?'<span class="lb-badge-tag lb-you">You</span>':'';
+    return '<div class="lb-row'+(isMe?' me':'')+'"><div class="lb-rank">'+rank+'</div><div class="lb-avatar">'+initials+'</div><div class="lb-info"><div class="lb-name">'+r.player_name+youTag+titleTag+'</div><div class="lb-streak-mini">&#128293; Best: '+(r.best_streak||0)+'</div></div><div class="lb-score"><div class="lb-score-val">'+val+'</div><div class="lb-score-lbl">'+lbl+'</div></div></div>';
   }).join('');
 }
 
 function renderFakeLeaderboard(tab){
-  var demo = [
-    {player_name:'Lagos Legend',streak:14,wins:22,played:28},
-    {player_name:'Abuja Babe',streak:9,wins:17,played:20},
-    {player_name:'Eko Hustler',streak:7,wins:14,played:18},
-    {player_name:'Naija Queen',streak:5,wins:10,played:13},
-    {player_name:playerName||'You',streak:st.stats.streak,wins:st.stats.wins,played:st.stats.played}
+  var demo=[
+    {player_name:'Lagos Legend',streak:14,wins:22,played:28,best_streak:14},
+    {player_name:'Abuja Babe',streak:9,wins:17,played:20,best_streak:9},
+    {player_name:'Eko Hustler',streak:7,wins:14,played:18,best_streak:7},
+    {player_name:'Naija Queen',streak:5,wins:10,played:13,best_streak:5},
+    {player_name:playerName||'You',streak:st.stats.streak,wins:st.stats.wins,played:st.stats.played,best_streak:st.stats.best}
   ];
-  var col = tab==='streak'?'streak':tab==='wins'?'wins':'played';
+  var col=tab==='streak'?'streak':tab==='wins'?'wins':'played';
   demo.sort(function(a,b){return b[col]-a[col];});
   renderLeaderboard(demo,tab);
 }
 
+/* ============================================================
+   STATS
+============================================================ */
 function loadStats(){
   try{var s=localStorage.getItem('naija-trivia-stats');if(s)st.stats=JSON.parse(s);}catch(e){}
-  updateStats();
+  updateStats();renderMiniRewards();
 }
-
 function saveStats(){
-  try{
-    localStorage.setItem('naija-trivia-stats', JSON.stringify(st.stats));
-  } catch(e){}
-
-  console.log("Saving score...", playerName, st.stats);
+  try{localStorage.setItem('naija-trivia-stats',JSON.stringify(st.stats));}catch(e){}
   upsertScore();
 }
-
 function updateStats(){
   document.getElementById('sv').textContent=st.stats.streak;
   document.getElementById('pv').textContent=st.stats.played;
   document.getElementById('wv').textContent=st.stats.played>0?Math.round((st.stats.wins/st.stats.played)*100)+'%':'0%';
   document.getElementById('bv').textContent=st.stats.best;
+  renderMiniRewards();
 }
 
+/* ============================================================
+   MODE
+============================================================ */
 function selectMode(m){
   document.querySelectorAll('.mode-card').forEach(function(c){c.classList.remove('active');});
   document.getElementById('mode-'+m).classList.add('active');
@@ -474,8 +761,8 @@ function init(){
   var tags={pidgin:'Pidgin Word',afrobeats:'Afrobeats Lyric',slang:'Naija Slang'};
   document.getElementById('q-tag').textContent=tags[st.mode];
   document.getElementById('lyric-block').style.display='none';
-  var ra=document.getElementById('r-answer');
-  ra.textContent='';ra.classList.remove('show');
+  var ra=document.getElementById('r-answer');ra.textContent='';ra.classList.remove('show');
+  var ru=document.getElementById('r-unlock');ru.textContent='';ru.classList.remove('show');
   if(st.mode==='pidgin'){
     document.getElementById('q-text').textContent=q.clue;
     document.getElementById('q-hint').textContent=q.hint;
@@ -543,7 +830,7 @@ function hKey(k){
   var q=getQ();var wl=q.word.length;
   if(k==='DEL'||k==='BACKSPACE')st.cur=st.cur.slice(0,-1);
   else if(k==='ENTER'){if(st.cur.length<wl){showToast('Too short! Add more letters');return;}submitWord();return;}
-  else if(st.cur.length<wl&&/^[A-Z]$/.test(k))st.cur+=k;
+  else if(st.cur.length<wl&&/^[A-Z]$/.test(k)){st.cur+=k;sndKey();}
   renderGrid();
 }
 
@@ -560,13 +847,14 @@ function submitWord(){
   st.guesses.push(g);
   for(var i=0;i<g.length;i++){var s=lSt(g,w,i);var cur=st.keyS[g[i]];if(!cur||(cur==='present'&&s==='correct')||cur==='absent')st.keyS[g[i]]=s;}
   var row='';
-  for(var i2=0;i2<g.length;i2++)row+=lSt(g,w,i2)==='correct'?'[G]':lSt(g,w,i2)==='present'?'[Y]':'[X]';
+  for(var i2=0;i2<g.length;i2++)row+=lSt(g,w,i2)==='correct'?'&#129001;':lSt(g,w,i2)==='present'?'&#129000;':'&#11035;';
   st.shareEmoji+=row+'\n';
   var li=document.getElementById('life-'+(st.guesses.length-1));
   if(li){li.innerHTML=g===w?'&#129001;':'&#10060;';if(g!==w)li.classList.add('lost');}
   st.cur='';renderGrid();renderKB();
-  if(g===w)setTimeout(function(){showResult(true,st.guesses.length);},350);
-  else if(st.guesses.length>=st.maxG)setTimeout(function(){showResult(false,st.guesses.length);},350);
+  if(g===w){sndCorrect();setTimeout(function(){showResult(true,st.guesses.length);},350);}
+  else if(st.guesses.length>=st.maxG){sndWrong();setTimeout(function(){showResult(false,st.guesses.length);},350);}
+  else{sndWrong();}
 }
 
 function renderOpts(){
@@ -585,10 +873,12 @@ function hOpt(idx,btn,q){
     btn.classList.add('correct');all.forEach(function(b){b.disabled=true;});
     st.answered=true;st.tries++;
     if(st.mode==='afrobeats')revealBlank(q.blank,true);
+    sndCorrect();
     var share='Naija Trivia '+(st.mode==='afrobeats'?'(Afrobeats)':'(Slang)')+'\nGot it in '+st.tries+(st.tries===1?' try':' tries')+'!\nStreak: '+(st.stats.streak+1)+'\nPlay at olivenwaigbo.github.io/naija-trivia/';
     setTimeout(function(){showResult(true,st.tries,share,q.explain);},320);
   }else{
     btn.classList.add('wrong');btn.disabled=true;st.tries++;
+    sndWrong();
     var livesLeft=3-st.tries;
     for(var i=2;i>=livesLeft;i--){var l=document.getElementById('life-'+i);if(l){l.innerHTML='&#128148;';l.classList.add('lost');}}
     if(livesLeft<=0){
@@ -609,10 +899,14 @@ function revealBlank(word,correct){
 }
 
 function showResult(win,tries,customShare,explain){
+  var prevStreak=st.stats.streak;
   st.stats.played++;
   if(win){st.stats.wins++;st.stats.streak++;if(st.stats.streak>st.stats.best)st.stats.best=st.stats.streak;}
   else st.stats.streak=0;
   updateStats();saveStats();
+
+  if(win)setTimeout(sndWin,100);else setTimeout(sndLose,100);
+
   var box=document.getElementById('result-box');
   box.classList.add('show',win?'win':'lose');
   var wM=['E don do! You sabi!','Naija no dey carry last!','You too much abeg!','Sharp sharp!','Your brain dey work!'];
@@ -620,18 +914,36 @@ function showResult(win,tries,customShare,explain){
   document.getElementById('r-emoji').innerHTML=win?(tries===1?'&#127942;':tries<=2?'&#128293;':'&#9989;'):'&#128557;';
   document.getElementById('r-title').textContent=win?wM[Math.floor(Math.random()*wM.length)]:lM[Math.floor(Math.random()*lM.length)];
   document.getElementById('r-sub').textContent=explain||(win?'Answered in '+tries+(tries===1?' try':' tries'):'');
+
   var q=getQ();
   var ra=document.getElementById('r-answer');
   if(!win&&st.mode==='pidgin'){ra.textContent='The word was: '+q.word;ra.classList.add('show');}
   else if(!win&&explain){ra.textContent=explain;ra.classList.add('show');}
-  var shareText=customShare||'Naija Trivia - '+(q.word||'')+'\n'+st.shareEmoji.trim().replace(/\[G\]/g,'&#129001;').replace(/\[Y\]/g,'&#129000;').replace(/\[X\]/g,'&#11035;')+'\nStreak: '+st.stats.streak+'\nPlay at olivenwaigbo.github.io/naija-trivia/';
+
+  // Check reward unlock
+  var ru=document.getElementById('r-unlock');
+  if(win){
+    var newReward=getCurrentReward(st.stats.streak);
+    var oldReward=getCurrentReward(prevStreak);
+    if(newReward&&(!oldReward||newReward.streak>oldReward.streak)){
+      ru.innerHTML='&#127881; NEW TITLE UNLOCKED: '+newReward.icon+' <strong>'+newReward.name+'</strong> — '+newReward.desc;
+      ru.classList.add('show');
+      setTimeout(sndUnlock,600);
+    }else{
+      var next=getNextReward(st.stats.streak);
+      if(next){ru.innerHTML='&#128293; '+st.stats.streak+' streak! Need '+(next.streak-st.stats.streak)+' more for <strong>'+next.name+'</strong> '+next.icon;ru.classList.add('show');}
+    }
+    if(REWARDS.some(function(r){return st.stats.streak===r.streak;}))setTimeout(sndStreak,200);
+  }
+
+  var shareText=customShare||'Naija Trivia by Olive Nwaigbo &#127475;&#127468;\n'+(q.word||'')+'\n'+st.shareEmoji.trim()+'\nStreak: '+st.stats.streak+'\nPlay: olivenwaigbo.github.io/naija-trivia/';
   document.getElementById('r-share').textContent=shareText;
   document.getElementById('r-share').dataset.copy=shareText;
 }
 
 function copyShare(){
   var t=document.getElementById('r-share').dataset.copy;
-  if(navigator.clipboard)navigator.clipboard.writeText(t).then(function(){showToast('Copied! Share the vibe');});
+  if(navigator.clipboard)navigator.clipboard.writeText(t).then(function(){showToast('Copied! Share the vibe &#128293;');});
   else{var ta=document.createElement('textarea');ta.value=t;document.body.appendChild(ta);ta.select();document.execCommand('copy');document.body.removeChild(ta);showToast('Copied! Share the vibe');}
 }
 
@@ -643,11 +955,16 @@ function nextQ(){
 }
 
 function showToast(msg){
-  var t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(function(){t.classList.remove('show');},2300);
+  var t=document.getElementById('toast');t.innerHTML=msg;t.classList.add('show');setTimeout(function(){t.classList.remove('show');},2300);
 }
 
 window.addEventListener('load',function(){
-  try{var n=localStorage.getItem('naija-trivia-name');if(n)document.getElementById('player-name-input').value=n;}catch(e){}
+  try{
+    var n=localStorage.getItem('naija-trivia-name');
+    if(n)document.getElementById('player-name-input').value=n;
+    var s=localStorage.getItem('naija-sound');
+    if(s==='0'){soundOn=false;document.getElementById('sound-btn').innerHTML='&#128263;';}
+  }catch(e){}
   document.getElementById('player-name-input').addEventListener('keydown',function(e){if(e.key==='Enter')startGame();});
 });
 </script>
